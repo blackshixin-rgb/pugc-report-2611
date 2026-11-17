@@ -8,7 +8,7 @@
 /* 旋钮：变化度 5 · 动效 1 · 密度 8 */
 :root{
   --bg:#f3f4f1; --paper:#fbfbf9; --fg:#16212b; --mute:#5b6670; --line:#d9ddd6; --soft:#e8ebe5;
-  --accent:#0b7a6e; --accent-soft:#d3ebe6; --warn:#b4521e;
+  --accent:#0b7a6e; --accent-soft:#d3ebe6; --warn:#b4521e; --warn-soft:#f5e1d6;
   --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
   --f-num:"IBM Plex Sans Condensed","Noto Sans SC",system-ui,sans-serif;
   --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;
@@ -16,9 +16,9 @@
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#12181d;--paper:#182027;--fg:#e4e8e3;--mute:#9aa5ad;--line:#2c3740;--soft:#212b33;
-  --accent:#4fbfae;--accent-soft:#1d3a37;--warn:#e08a5c;color-scheme:dark}}
+  --accent:#4fbfae;--accent-soft:#1d3a37;--warn:#e08a5c;--warn-soft:#3a2a21;color-scheme:dark}}
 :root[data-theme="dark"]{--bg:#12181d;--paper:#182027;--fg:#e4e8e3;--mute:#9aa5ad;--line:#2c3740;--soft:#212b33;
-  --accent:#4fbfae;--accent-soft:#1d3a37;--warn:#e08a5c;color-scheme:dark}
+  --accent:#4fbfae;--accent-soft:#1d3a37;--warn:#e08a5c;--warn-soft:#3a2a21;color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font:400 var(--t2)/1.55 var(--f-body);
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:var(--s5) var(--s7)}
@@ -39,8 +39,10 @@ header{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:var(
 .kpi{padding:var(--s3) var(--s3) 0 0}
 .kpi b{display:block;font:600 var(--t5)/1 var(--f-num);font-variant-numeric:tabular-nums}
 .kpi span{font-size:var(--t1);color:var(--mute)}
-.finds{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;border-top:1px solid var(--line)}
-.finds div{padding:var(--s3) var(--s4) var(--s3) 0;border-bottom:1px solid var(--line)}
+.finds{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--s5);border-top:1px solid var(--line);padding-top:var(--s4)}
+.finds div{display:flex;flex-direction:column;gap:var(--s1)}
+.finds big{font:600 var(--t5)/1 var(--f-num);color:var(--accent)}
+.finds span{font-size:var(--t2)}
 .finds b{color:var(--accent)}
 section{display:flex;flex-direction:column;gap:var(--s4);scroll-margin-top:var(--s7)}
 .sechead{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s4);flex-wrap:wrap;border-bottom:2px solid var(--fg);padding-bottom:var(--s2)}
@@ -69,6 +71,30 @@ button:focus-visible,select:focus-visible,.card:focus-visible{outline:2px solid 
 .card .b .sp{font:600 var(--t3)/1.1 var(--f-num)}
 .pill{display:inline-block;font-size:var(--t1);padding:0 var(--s1);border:1px solid var(--accent);color:var(--accent);border-radius:2px}
 .more{align-self:center}
+.chip{display:inline-block;font:600 var(--t1)/1.4 var(--f-num);padding:0 var(--s1);border-radius:2px;font-variant-numeric:tabular-nums}
+.chip.good{background:var(--accent-soft);color:var(--accent)}
+.chip.bad{background:var(--warn-soft);color:var(--warn)}
+.chip.mid{background:var(--soft);color:var(--mute)}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.seg button{border:0;border-right:1px solid var(--line);border-radius:0;padding:var(--s1) var(--s3);font-size:var(--t2)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.learn{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:var(--s4)}
+.lcard{background:var(--paper);border:1px solid var(--line);display:flex;flex-direction:column;cursor:pointer;min-width:0}
+.lcard .m{aspect-ratio:9/13;position:relative;background:var(--soft);overflow:hidden}
+.lcard .m img{width:100%;height:100%;object-fit:cover;display:block}
+.lcard .m .rk{position:absolute;left:0;top:0;background:var(--accent);color:var(--paper);font:600 var(--t2)/1 var(--f-num);padding:var(--s2)}
+.lcard .m .play{position:absolute;right:var(--s2);bottom:var(--s2);background:var(--fg);color:var(--bg);font-size:var(--t1);padding:var(--s1) var(--s2)}
+.lcard .b{padding:var(--s3);display:flex;flex-direction:column;gap:var(--s2)}
+.lcard .nums{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3)}
+.lcard .nums b{font:600 var(--t4)/1.1 var(--f-num);display:block}
+.lcard .nums span{font-size:var(--t1);color:var(--mute)}
+.lcard .why{font-size:var(--t1);color:var(--mute)}
+.scatter{background:var(--paper);border:1px solid var(--line);padding:var(--s4);overflow-x:auto}
+.scatter svg{display:block;width:100%;min-width:620px;height:auto}
+.scatter circle{cursor:pointer}
+.keys{display:flex;gap:var(--s4);flex-wrap:wrap;font-size:var(--t1);color:var(--mute)}
+.keys i{display:inline-block;width:10px;height:10px;border-radius:999px;margin-right:var(--s1);vertical-align:-1px}
 .tbl{overflow-x:auto;border:1px solid var(--line);background:var(--paper)}
 table{border-collapse:collapse;width:100%;font-size:var(--t1)}
 th,td{padding:var(--s1) var(--s2);text-align:left;white-space:nowrap}
@@ -92,20 +118,33 @@ td img{width:44px;height:58px;object-fit:cover;display:block;cursor:zoom-in}
 </style>
 
 <div class="wrap">
-<nav aria-label="页面目录"><a href="#pan">同盘子素材</a><a href="#wall">素材墙</a><a href="#market">大盘在投什么</a><a href="#inhouse">内部投放周表</a></nav>
+<nav aria-label="页面目录"><a href="#learn">最值得借鉴</a><a href="#map">全盘一张图</a><a href="#pan">分类对比</a><a href="#wall">素材墙</a><a href="#market">大盘在投什么</a><a href="#inhouse">内部投放周表</a></nav>
 
 <header>
   <div>
     <h1>PUGC 投放素材盘点</h1>
-    <p class="mute">数据来自飞书「投放数据」表的 8 张分表，2026-11-17 导出。美区「同盘子其他素材」702 条有消耗和新增，是判断哪类素材受欢迎的主数据；三张「大盘」只有素材类型和地区；四张「内部投放」是每周自投的效果。</p>
+    <p class="mute">美区同盘子 702 条素材，飞书投放数据表 11-17 导出</p>
   </div>
   <div class="kpis" id="kpis"></div>
 </header>
 
 <div class="finds" id="finds"></div>
 
+<section id="learn">
+  <div class="sechead"><h2>最值得借鉴</h2><span class="legend">消耗过 $1,500 且 CPI 低于均值，按 CPI 排</span></div>
+  <div class="learn" id="learnV"></div>
+  <div class="sechead"><h3>图文</h3><span class="legend">消耗过 $150 且 CPI 低于均值</span></div>
+  <div class="learn" id="learnI"></div>
+</section>
+
+<section id="map">
+  <div class="sechead"><h2>全盘一张图</h2><span class="legend">右下角 = 花得多又便宜</span></div>
+  <div class="scatter" id="scatter"></div>
+  <div class="keys" id="keys"></div>
+</section>
+
 <section id="pan">
-  <div class="sechead"><h2>同盘子素材：钱花在哪类内容上</h2><span class="legend">条形 = 消耗；右侧数字 = 消耗 / CPI（每个新增的成本，越低越好，高于均值 1.5 倍标橙）</span></div>
+  <div class="sechead"><h2>分类对比</h2><span class="legend">条形 = 消耗；CPI 绿 = 低于均值，橙 = 贵 30% 以上</span></div>
   <div class="charts" id="charts"></div>
 </section>
 
@@ -115,7 +154,8 @@ td img{width:44px;height:58px;object-fit:cover;display:block;cursor:zoom-in}
     <select id="fScene" aria-label="场景"></select>
     <select id="fC2" aria-label="二级分类"></select>
     <select id="fType" aria-label="类型"><option value="">视频和图片</option><option>视频</option><option>图片</option></select>
-    <select id="fSort" aria-label="排序"><option value="spend">按消耗</option><option value="cpi">按 CPI 从低到高（新增≥10）</option><option value="inst">按新增</option></select>
+    <span class="seg" role="group" aria-label="排序"><button data-s="spend" aria-pressed="true">消耗 高→低</button><button data-s="cpi" aria-pressed="false">CPI 低→高</button><button data-s="cpihi" aria-pressed="false">CPI 高→低</button><button data-s="inst" aria-pressed="false">新增 多→少</button><button data-s="up" aria-pressed="false">上传 新→旧</button></span>
+    <label class="legend"><input type="checkbox" id="fMin" checked> 只看消耗 ≥ $200</label>
     <span class="legend" id="fCount"></span>
   </div>
   <div class="grid" id="grid"></div>
@@ -123,13 +163,13 @@ td img{width:44px;height:58px;object-fit:cover;display:block;cursor:zoom-in}
 </section>
 
 <section id="market">
-  <div class="sechead"><h2>大盘在投什么</h2><span class="legend">这三张表没有消耗，只能看各类素材的条数占比和样例</span></div>
+  <div class="sechead"><h2>大盘在投什么</h2><span class="legend">只有条数，没有消耗</span></div>
   <div class="two" id="mkt"></div>
   <div id="mktSamples" style="display:flex;flex-direction:column;gap:var(--s4)"></div>
 </section>
 
 <section id="inhouse">
-  <div class="sechead"><h2>内部投放周表</h2><span class="legend">2611W2 有消耗，2610W3–W5 有新增和 CPI；点缩略图看大图或视频</span></div>
+  <div class="sechead"><h2>内部投放周表</h2><span class="legend">点缩略图看大图</span></div>
   <div class="two">
     <div class="chart"><h3>2611W2 各素材消耗（多国合计）</h3><div class="tbl" style="max-height:520px;overflow:auto"><table id="tW2"></table></div></div>
     <div class="chart"><h3>2610W3–W5 自投素材效果</h3><div class="tbl" style="max-height:520px;overflow:auto"><table id="tIn"></table></div></div>
@@ -155,40 +195,69 @@ function init(){
   const cet=P.c2.find(x=>x.k.startsWith('Culture')),life=P.c2.find(x=>x.k==='Lifestyle');
   const won=P.items.filter(i=>i.verdict&&i.verdict!=='无效素材').length;
   $('#finds').innerHTML=[
-    `<b>钱高度集中</b>：消耗前 10 条拿走 ${(P.top10share*100).toFixed(0)}%，702 条里只有 ${won} 条被判为起量或有效。第 1、5 条都是真人对镜头讲 TikTok Pro 赚积分换券，合计 ${fmt(P.items[0].spend+P.items[4].spend)}。`,
-    `<b>shortvideo 最划算</b>：${sv.n} 条占 ${(sv.spend/T.spend*100).toFixed(0)}% 消耗，CPI ${cp(sv.cpi)}；ip 类 ${ip.n} 条 CPI ${cp(ip.cpi)}。第 2、3 条是带搜索框的 NFL 集锦，合计 ${fmt(P.items[1].spend+P.items[2].spend)}。`,
-    `<b>10–20 秒最好跑</b>：花了 ${(d1.spend/T.spend*100).toFixed(0)}% 的钱，CPI ${cp(d1.cpi)}；60 秒以上 CPI ${cp(d6.cpi)}，贵一倍多。`,
-    `<b>竖屏是主力，图片便宜但量小</b>：9:16 占 ${(r916.spend/T.spend*100).toFixed(0)}% 消耗；图片 ${img.n} 条只花 ${fmt(img.spend)}，CPI ${cp(img.cpi)} 反而最低。`,
-    `<b>分类里</b>：Culture & Education & Technology CPI ${cp(cet.cpi)}，Sports & Outdoors 消耗最大；Lifestyle CPI ${cp(life.cpi)}，是均值的 ${(life.cpi/T.cpi).toFixed(1)} 倍。`
-  ].map(t=>`<div>${t}</div>`).join('');
+    [(P.top10share*100).toFixed(0)+'%', '的钱花在消耗前 10 条上'],
+    [cp(sv.cpi), 'shortvideo 的 CPI，各场景最低'],
+    [cp(d1.cpi), '10–20 秒视频的 CPI，各时长最低']
+  ].map(([b,t])=>`<div><big>${b}</big><span>${t}</span></div>`).join('');
   const charts=[['场景',P.scene],['二级分类（前 14）',P.c2.slice(0,14)],['时长',P.dur],['画幅',P.ratio],['类型',P.type]];
   $('#charts').innerHTML=charts.map(([t,rows])=>chart(t,rows,T)).join('');
   // filters
   const opts=(arr,all)=>`<option value="">${all}</option>`+arr.map(x=>`<option>${x.k}</option>`).join('');
   $('#fScene').innerHTML=opts(P.scene,'全部场景');$('#fC2').innerHTML=opts(P.c2,'全部二级分类');
-  ['#fScene','#fC2','#fType','#fSort'].forEach(s=>$(s).addEventListener('change',()=>{shown=60;wall()}));
+  ['#fScene','#fC2','#fType','#fMin'].forEach(s=>$(s).addEventListener('change',()=>{shown=60;wall()}));
+  document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));sortBy=b.dataset.s;shown=60;wall()});
+  learn();scatter();
   $('#more').addEventListener('click',()=>{shown+=60;wall()});
   const hv=P.items.filter(i=>i.v).length;
-  $('#wallnote').textContent=`消耗前 ${hv} 条视频可直接播放；其余点开后有变色龙链接（需登录变色龙）`;
+  $('#wallnote').textContent=`前 ${hv} 条视频可直接播放`;
   wall();market();inhouse();
 }
 function chart(title,rows,T){
   const max=Math.max(...rows.map(r=>r.spend));
   return `<div class="chart"><h3>${title}</h3><div class="bars"><span class="hd">分类</span><span class="hd">消耗</span><span class="hd r">消耗</span><span class="hd r">CPI</span>`+
-  rows.map(r=>`<span class="lab" title="${r.k}">${r.k} <span class="mute">${r.n}条</span></span><span class="track"><span class="fill" style="width:${(r.spend/max*100).toFixed(1)}%"></span></span><span class="r num">${fmt(r.spend)}</span><span class="r num cpi ${r.cpi&&r.cpi>T.cpi*1.5?'bad':''}">${cp(r.cpi)}</span>`).join('')+`</div></div>`;
+  rows.map(r=>`<span class="lab" title="${r.k}">${r.k} <span class="mute">${r.n}条</span></span><span class="track"><span class="fill" style="width:${(r.spend/max*100).toFixed(1)}%"></span></span><span class="r num">${fmt(r.spend)}</span><span class="r">${chip(r.cpi)}</span>`).join('')+`</div></div>`;
 }
-let shown=60;
+let shown=60,sortBy='spend';
+const chip=c=>{const a=D.pan.total.cpi;return c==null?'<span class="chip mid">–</span>':`<span class="chip ${c<=a?'good':c>a*1.3?'bad':'mid'}">${cp(c)}</span>`};
 function wall(){
-  const s=$('#fScene').value,c=$('#fC2').value,t=$('#fType').value,o=$('#fSort').value;
-  let L=D.pan.items.filter(i=>(!s||i.scene===s)&&(!c||i.c2===c)&&(!t||i.type===t));
-  if(o==='cpi') L=L.filter(i=>i.inst>=10).sort((a,b)=>a.cpi-b.cpi); else if(o==='inst') L=[...L].sort((a,b)=>b.inst-a.inst);
+  const s=$('#fScene').value,c=$('#fC2').value,t=$('#fType').value,mn=$('#fMin').checked;
+  let L=D.pan.items.filter(i=>(!s||i.scene===s)&&(!c||i.c2===c)&&(!t||i.type===t)&&(!mn||i.spend>=200));
+  const o=sortBy;
+  if(o==='cpi') L=L.filter(i=>i.cpi!=null).sort((a,b)=>a.cpi-b.cpi);
+  else if(o==='cpihi') L=L.filter(i=>i.cpi!=null).sort((a,b)=>b.cpi-a.cpi);
+  else if(o==='inst') L=[...L].sort((a,b)=>b.inst-a.inst);
+  else if(o==='up') L=[...L].sort((a,b)=>(b.up||'').localeCompare(a.up||''));
   $('#fCount').textContent=`${L.length} 条`;
   $('#grid').innerHTML=L.slice(0,shown).map((i,k)=>{
     const th=i.t||i.i;
     const m=th?`<img loading="lazy" src="${th}" alt="${i.c2} 素材封面">`:`<div class="none">${i.type}<br>点开到变色龙查看</div>`;
-    return `<div class="card" tabindex="0" data-cid="${i.cid}"><div class="m">${m}<span class="tag">${i.v?"视频 ":""}#${D.pan.items.indexOf(i)+1}</span></div><div class="b"><div class="top"><span class="sp num">${fmt(i.spend)}</span><span class="num mute">CPI ${cp(i.cpi)}</span></div><span>${i.scene} / ${i.c2}</span><span class="mute">${i.type}${i.dur?` ${i.dur}秒`:''} ${i.size}${i.verdict&&i.verdict!=='无效素材'?` <span class="pill">${i.verdict}</span>`:''}</span></div></div>`}).join('');
+    return `<div class="card" tabindex="0" data-cid="${i.cid}"><div class="m">${m}<span class="tag">${i.v?"视频 ":""}#${D.pan.items.indexOf(i)+1}</span></div><div class="b"><div class="top"><span class="sp num">${fmt(i.spend)}</span><span>CPI ${chip(i.cpi)}</span></div><span>${i.scene} / ${i.c2}</span><span class="mute">${i.type}${i.dur?` ${i.dur}秒`:''} ${i.size}${i.verdict&&i.verdict!=='无效素材'?` <span class="pill">${i.verdict}</span>`:''}</span></div></div>`}).join('');
   $('#more').hidden=L.length<=shown;
   document.querySelectorAll('.card').forEach(el=>{const go=()=>openItem(D.pan.items.find(x=>x.cid===el.dataset.cid));el.onclick=go;el.onkeydown=e=>{if(e.key==='Enter')go()}});
+}
+function learn(){
+  const P=D.pan,a=P.total.cpi;
+  const V=P.items.filter(i=>i.type==='视频'&&i.spend>=1500&&i.cpi!=null&&i.cpi<=a).sort((x,y)=>x.cpi-y.cpi);
+  const seen=new Set();const I=P.items.filter(i=>i.type==='图片'&&i.spend>=150&&i.cpi!=null&&i.cpi<=a).sort((x,y)=>x.cpi-y.cpi).filter(i=>{const k=i.spend+'|'+i.cpi;if(seen.has(k))return false;seen.add(k);return true});
+  const card=(i,k)=>`<div class="lcard" tabindex="0" data-cid="${i.cid}"><div class="m">${(i.t||i.i)?`<img loading="lazy" src="${i.t||i.i}" alt="${i.c2}">`:''}<span class="rk">${k+1}</span><span class="play">${i.v?'播放':'放大'}</span></div><div class="b"><div class="nums"><div><b>${cp(i.cpi)}</b><span>CPI，低 ${Math.round((1-i.cpi/a)*100)}%</span></div><div><b>${fmt(i.spend)}</b><span>消耗</span></div></div><span class="why">${i.scene} / ${i.c2}${i.dur?`，${Math.round(i.dur)} 秒`:''}</span></div></div>`;
+  $('#learnV').innerHTML=V.map(card).join('');$('#learnI').innerHTML=I.map(card).join('');
+  document.querySelectorAll('.lcard').forEach(el=>{const go=()=>openItem(P.items.find(x=>x.cid===el.dataset.cid));el.onclick=go;el.onkeydown=e=>{if(e.key==='Enter')go()}});
+}
+function scatter(){
+  const P=D.pan,a=P.total.cpi,pts=P.items.filter(i=>i.spend>=50&&i.cpi!=null&&i.inst>=1);
+  const W=1000,H=420,L=56,R=16,T=16,B=40,xmin=Math.log10(50),xmax=Math.log10(60000),ymax=200;
+  const X=v=>L+(Math.log10(v)-xmin)/(xmax-xmin)*(W-L-R),Y=v=>T+(1-Math.min(v,ymax)/ymax)*(H-T-B);
+  const col={shortvideo:'var(--accent)',ip:'var(--fg)','creative&social':'var(--warn)',live:'var(--mute)'};
+  let g='';
+  [100,1000,10000].forEach(v=>g+=`<line x1="${X(v)}" x2="${X(v)}" y1="${T}" y2="${H-B}" stroke="var(--line)"/><text x="${X(v)}" y="${H-B+18}" text-anchor="middle" font-size="12" fill="var(--mute)">${fmt(v)}</text>`);
+  [0,50,100,150,200].forEach(v=>g+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--soft)"/><text x="${L-8}" y="${Y(v)+4}" text-anchor="end" font-size="12" fill="var(--mute)">$${v}${v===200?'+':''}</text>`);
+  g+=`<line x1="${L}" x2="${W-R}" y1="${Y(a)}" y2="${Y(a)}" stroke="var(--fg)" stroke-dasharray="4 4"/><text x="${W-R}" y="${Y(a)-6}" text-anchor="end" font-size="12" fill="var(--fg)">均值 ${cp(a)}</text>`;
+  g+=`<text x="${W-R-4}" y="${H-B-8}" text-anchor="end" font-size="14" font-weight="700" fill="var(--accent)">花得多又便宜</text><text x="${W-R-4}" y="${T+14}" text-anchor="end" font-size="13" fill="var(--warn)">花得多但贵</text><text x="${L+6}" y="${H-B-8}" font-size="13" fill="var(--mute)">便宜但没放量</text>`;
+  g+=pts.map(i=>`<circle cx="${X(i.spend).toFixed(1)}" cy="${Y(i.cpi).toFixed(1)}" r="${(3+Math.sqrt(i.spend)/30).toFixed(1)}" fill="${col[i.scene]||'var(--mute)'}" fill-opacity=".6" stroke="var(--paper)" data-cid="${i.cid}"><title>${fmt(i.spend)}，CPI ${cp(i.cpi)}，${i.scene} / ${i.c2}</title></circle>`).join('');
+  g+=`<text x="${(L+W-R)/2}" y="${H-4}" text-anchor="middle" font-size="12" fill="var(--mute)">消耗（对数刻度）</text>`;
+  $('#scatter').innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="素材消耗与 CPI 散点图">${g}</svg>`;
+  $('#keys').innerHTML=Object.entries(col).map(([k,c])=>`<span><i style="background:${c}"></i>${k}</span>`).join('')+'<span>点越大花得越多，点击看原片</span>';
+  document.querySelectorAll('#scatter circle').forEach(el=>el.onclick=()=>openItem(P.items.find(x=>x.cid===el.dataset.cid)));
 }
 function openItem(i){
   let m='';
