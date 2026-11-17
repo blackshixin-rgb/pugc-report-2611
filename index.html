@@ -205,7 +205,7 @@ function top10(){
   const L=P.items.filter(i=>(V?i.type==='视频'&&i.spend>=1500:i.type==='图片'&&i.spend>=150)&&i.cpi!=null&&i.cpi<=AVG)
     .sort((x,y)=>x.cpi-y.cpi).filter(i=>{const k=i.spend+'|'+i.cpi;if(seen.has(k))return false;seen.add(k);return true}).slice(0,10);
   $('#t10note').textContent=V?'消耗过 $1,500 且 CPI 低于均值，按 CPI 从低到高':'消耗过 $150 且 CPI 低于均值，按 CPI 从低到高（符合条件的只有这些）';
-  $('#top10').innerHTML=L.map((i,k)=>`<div class="lcard" tabindex="0" data-r="${i.rank}"><div class="m">${(i.t||i.i)?`<img loading="lazy" src="${i.t||i.i}" alt="${i.c2}">`:''}<span class="rk">${k+1}</span><span class="play">${i.v?'播放':'放大'}</span></div><div class="b"><div class="nums"><b>${cp(i.cpi)}</b><span class="num">${fmt(i.spend)}</span></div><span class="sub">${i.scene} / ${i.c2}</span><span class="sub">${i.dur?Math.round(i.dur)+' 秒，':''}低于均值 ${Math.round((1-i.cpi/AVG)*100)}%</span><span class="sub">${i.up?i.up.slice(5)+' 上传，上传至今 '+i.age+' 天':''}</span></div></div>`).join('');
+  $('#top10').innerHTML=L.map((i,k)=>`<div class="lcard" tabindex="0" data-r="${i.rank}"><div class="m">${(i.t||i.i)?`<img loading="lazy" src="${i.t||i.i}" alt="${i.c2}">`:''}<span class="rk">${k+1}</span><span class="play">${i.v?'播放':'放大'}</span></div><div class="b"><div class="nums"><b>${fmt(i.spend)}</b>${chip(i.cpi)}</div><span class="sub">${i.scene} / ${i.c2}</span><span class="sub">${i.dur?Math.round(i.dur)+' 秒，':''}低于均值 ${Math.round((1-i.cpi/AVG)*100)}%</span><span class="sub">${i.up?i.up.slice(5)+' 上传，上传至今 '+i.age+' 天':''}</span></div></div>`).join('');
   bind('#top10 .lcard');
 }
 function wall(){
