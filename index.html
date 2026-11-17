@@ -108,7 +108,7 @@ details summary{cursor:pointer;font-weight:700}
     <span class="mute">飞书「数据反馈」表 11-17 导出</span>
     <div class="mute" style="font-size:12px">同盘子（美区大盘）</div>
     <div class="kpis" id="kpis"></div>
-    <div class="mute" style="font-size:12px">内部投放 2611W2（表里只有消耗，没有新增和 CPI）</div>
+    <div class="mute" style="font-size:12px">内部投放 2611W2</div>
     <div class="kpis" id="kpis2"></div>
   </div>
   <div class="blk"><h2>结论</h2><ol class="pts" id="pts"></ol></div>
@@ -185,7 +185,7 @@ function init(){
   const IN=D.all.filter(i=>i.src!=='同盘子'&&i.src!=='2611W2'&&i.inst>0&&i.cpi>0),iS=IN.reduce((a,i)=>a+i.spend,0),iI=IN.reduce((a,i)=>a+i.inst,0),iC=iI?iS/iI:null;
   const w2s=D.all.filter(i=>i.src==='2611W2').reduce((a,i)=>a+i.spend,0);
   const W2=D.w2,w2all=W2.reduce((a,i)=>a+i.spend,0);
-  $('#kpis2').innerHTML=[['条素材',fi(W2.length)],['消耗',fmt(w2all)],['新增用户','表里没有'],['平均 CPI','表里没有']].map(([a,b])=>`<div class="kpi"><b class="num">${b}</b><span>${a}</span></div>`).join('');
+  $('#kpis2').innerHTML=[['条素材',fi(W2.length)],['消耗',fmt(w2all)]].map(([a,b])=>`<div class="kpi"><b class="num">${b}</b><span>${a}</span></div>`).join('');
   const inGood=IN.filter(i=>i.cpi<=AVG).length;
   $('#pts').innerHTML=[
     `<b>内部投放比大盘便宜得多</b>：10 月 W3–W5 去重后 ${IN.length} 条平均 CPI ${cp(iC)}，大盘 ${cp(T.cpi)}；跑得最好的是顶部字幕＋反应图的情侣梗`,
