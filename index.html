@@ -133,7 +133,7 @@ details summary{cursor:pointer;font-weight:700}
       <span class="seg" role="group" aria-label="排序" id="sortSeg"><button data-s="cpi" aria-pressed="false">CPI</button><button data-s="spend" aria-pressed="true">消耗</button><button data-s="inst" aria-pressed="false">新增</button></span>
       <span class="seg" role="group" aria-label="方向" id="dirSeg"><button data-d="desc" aria-pressed="true">降序</button><button data-d="asc" aria-pressed="false">升序</button></span>
     </div>
-    <span class="mute" style="font-size:12px">按 CPI 排时只算消耗满 $200 的素材，避免花几块钱碰巧便宜的排到前面</span>
+    <span class="mute" style="font-size:12px" id="wallNote">按 CPI 排时只算消耗满 $200 的素材</span>
     <div class="grid" id="grid"></div>
     <button class="more" id="more">再看 60 条</button>
   </section>
@@ -157,7 +157,14 @@ fetch('data.json').then(r=>r.json()).then(d=>{D=d;AVG=d.pan.total.cpi;
   const tagSplit=t=>{const p=(t||'').split(' / ');return [p[0]||'未标',p[1]||p[0]||'未标']};
   const inw=D.inw.map(a=>{const [c1,c2]=tagSplit(a.tag);const nm=(a.name||'');return {...a,src:a.wk,lab:a.wk.slice(4),type:/图片/.test(nm)?'图片':'视频',spend:Math.round(a.inst*a.cpi*100)/100,scene:'内部投放',c1,c2,verdict:a.ver,size:'',dur:0,up:'',gid:''}});
   const w2=D.w2.map(a=>({...a,src:'2611W2',lab:'W2',type:/图片/.test(a.name)?'图片':'视频',inst:null,cpi:null,scene:'内部投放',c1:'未标',c2:'未标',verdict:'',size:'',dur:0,up:'',gid:'',ver:''}));
-  D.all=[...D.pan.items,...inw,...w2];
+  const order={'2610W3':1,'2610W4':2,'2610W5':3,'2611W2':4};
+  const latest=new Map();
+  inw.forEach(i=>{const o=latest.get(i.cid);if(!o||order[i.src]>order[o.src])latest.set(i.cid,{...i,weeks:[...(o?o.weeks:[]),i.src]});else o.weeks.push(i.src)});
+  const w2keep=[];w2.forEach(i=>{const o=latest.get(i.cid);if(o){o.weeks.push('2611W2');o.w2spend=i.spend}else w2keep.push({...i,weeks:['2611W2']})});
+  const pz=new Set(D.pan.items.map(i=>i.cid));
+  const inMerged=[...latest.values()].filter(i=>!pz.has(i.cid));
+  D.all=[...D.pan.items,...inMerged,...w2keep];
+  D.dupNote=`内部 ${inw.length} 行合并成 ${latest.size} 条（同一 CID 多周出现只留最新一周）`;
   D.all.forEach((i,k)=>{i.ix=k;i.db=durB(i);i.rb=ratioB(i);i.age=i.up?Math.round((Date.parse('2026-11-17')-Date.parse(i.up))/864e5):null;i.ab=ageB(i.age)});
   init()});
 function ageB(a){return a==null?'未知':a<=30?'30天内':a<=60?'31–60天':a<=120?'61–120天':a<=180?'121–180天':'180天以上'}
@@ -188,6 +195,7 @@ function init(){
   $$('#sortSeg button').forEach(b=>b.onclick=()=>{$$('#sortSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));sortBy=b.dataset.s;shown=60;wall()});
   $$('#dirSeg button').forEach(b=>b.onclick=()=>{$$('#dirSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));dir=b.dataset.d;shown=60;wall()});
   $$('[aria-label="借鉴类型"] button').forEach(b=>b.onclick=()=>{$$('[aria-label="借鉴类型"] button').forEach(x=>x.setAttribute('aria-pressed',x===b));t10=b.dataset.k;top10()});
+  $('#wallNote').textContent='按 CPI 排时只算消耗满 $200 的素材；'+D.dupNote;
   $('#more').onclick=()=>{shown+=60;wall()};
   top10();wall();
 }
@@ -216,7 +224,7 @@ function wall(){
 function bind(sel){$$(sel).forEach(el=>{const go=()=>openItem(D.all[+el.dataset.r]);el.onclick=go;el.onkeydown=e=>{if(e.key==='Enter')go()}})}
 function openItem(i){
   const m=i.v?`<video src="${i.v}" controls autoplay muted playsinline></video>`:(i.i||i.t)?`<img src="${i.i||i.t}" alt="素材大图">`:`<div style="color:#e4e8e3;padding:24px">这条没存到本页，点右侧变色龙链接</div>`;
-  lb(m,`<b class="num" style="font-size:21px">${fmt(i.spend)} 消耗，CPI ${cp(i.cpi)}</b>${i.src!=='同盘子'&&i.inst!=null?'<span>消耗 = 新增 × CPI 算出</span>':''}<span>${i.src==='同盘子'?'新增 '+fi(i.inst)+'，同盘子第 '+i.rank+' 名':i.src+' 内部投放'+(i.inst!=null?'，新增 '+fi(i.inst):'')+(i.name?'，'+i.name:'')}</span><span>${i.scene} / ${i.c1} / ${i.c2}</span><span>${i.type} ${i.size}${i.dur?'，'+i.dur+' 秒':''}${i.up?'，'+i.up+' 上传，至 11-17 共 '+i.age+' 天':''}</span><span>${i.verdict||''}</span>${i.gid?`<a href="https://www.tiktok.com/@/video/${i.gid}" target="_blank" rel="noopener">TikTok 原帖</a>`:''}${i.url?`<a href="${i.url}" target="_blank" rel="noopener">变色龙原片（需登录）</a>`:''}<span style="color:#9aa5ad">CID ${i.cid}</span>`);
+  lb(m,`<b class="num" style="font-size:21px">${fmt(i.spend)} 消耗，CPI ${cp(i.cpi)}</b>${i.src!=='同盘子'&&i.inst!=null?'<span>消耗 = 新增 × CPI 算出</span>':''}<span>${i.src==='同盘子'?'新增 '+fi(i.inst)+'，同盘子第 '+i.rank+' 名':i.src+' 内部投放'+(i.inst!=null?'，新增 '+fi(i.inst):'')+(i.name?'，'+i.name:'')}</span>${i.weeks&&i.weeks.length>1?'<span>投过的周：'+i.weeks.join('、')+'，这里显示最新一周 '+i.src+' 的数据</span>':''}<span>${i.scene} / ${i.c1} / ${i.c2}</span><span>${i.type} ${i.size}${i.dur?'，'+i.dur+' 秒':''}${i.up?'，'+i.up+' 上传，至 11-17 共 '+i.age+' 天':''}</span><span>${i.verdict||''}</span>${i.gid?`<a href="https://www.tiktok.com/@/video/${i.gid}" target="_blank" rel="noopener">TikTok 原帖</a>`:''}${i.url?`<a href="${i.url}" target="_blank" rel="noopener">变色龙原片（需登录）</a>`:''}<span style="color:#9aa5ad">CID ${i.cid}</span>`);
 }
 function lb(m,info){$('#lbm').innerHTML=m;$('#lbi').innerHTML=info;$('#lb').hidden=false;$('#lbx').focus()}
 function closeLb(){$('#lb').hidden=true;$('#lbm').innerHTML=''}
