@@ -129,24 +129,11 @@ details summary{cursor:pointer;font-weight:700}
 
   <section class="blk" aria-label="素材墙">
     <div class="bar-head"><h2>素材墙 <span class="mute num" id="fCount"></span></h2>
-      <span class="seg" role="group" aria-label="排序" id="sortSeg"><button data-s="spend" aria-pressed="true">消耗</button><button data-s="cpi" aria-pressed="false">CPI</button><button data-s="inst" aria-pressed="false">新增</button><button data-s="dur" aria-pressed="false">时长</button><button data-s="age" aria-pressed="false">上传至今天数</button></span>
-      <span class="seg" role="group" aria-label="方向" id="dirSeg"><button data-d="desc" aria-pressed="true">高→低</button><button data-d="asc" aria-pressed="false">低→高</button></span>
+      <span class="seg" role="group" aria-label="来源" id="srcSeg"><button data-v="" aria-pressed="true">全部</button><button data-v="同盘子" aria-pressed="false">同盘子</button><button data-v="内部" aria-pressed="false">内部投放</button></span>
+      <span class="seg" role="group" aria-label="排序" id="sortSeg"><button data-s="cpi" aria-pressed="false">CPI</button><button data-s="spend" aria-pressed="true">消耗</button><button data-s="inst" aria-pressed="false">新增</button></span>
+      <span class="seg" role="group" aria-label="方向" id="dirSeg"><button data-d="desc" aria-pressed="true">降序</button><button data-d="asc" aria-pressed="false">升序</button></span>
     </div>
-    <div class="filters">
-      <label>来源<select id="fSrc"></select></label>
-      <label>类型<select id="fType"><option value="">全部</option><option>视频</option><option>图片</option></select></label>
-      <label>场景<select id="fScene"></select></label>
-      <label>一级分类<select id="fC1"></select></label>
-      <label>二级分类<select id="fC2"></select></label>
-      <label>时长<select id="fDur"></select></label>
-      <label>画幅<select id="fRatio"></select></label>
-      <label>上传至今<select id="fAge"></select></label>
-      <label>效果判断<select id="fVer"></select></label>
-      <label>CPI<select id="fCpi"><option value="">全部</option><option value="good">低于均值</option><option value="mid">均值到 1.3 倍</option><option value="bad">贵 30% 以上</option></select></label>
-      <label>最低消耗 $<input type="number" id="fMin" value="200" min="0" step="100"></label>
-      <label>搜 CID / GID<input type="search" id="fQ" placeholder="粘贴编号"></label>
-    </div>
-    <div class="row"><label><input type="checkbox" id="fPlay"> 只看能直接播放的</label><button class="reset" id="reset">清空筛选</button></div>
+    <span class="mute" style="font-size:12px">按 CPI 排时只算消耗满 $200 的素材，避免花几块钱碰巧便宜的排到前面</span>
     <div class="grid" id="grid"></div>
     <button class="more" id="more">再看 60 条</button>
   </section>
@@ -162,7 +149,7 @@ const fi=n=>n==null?'–':Number(n).toLocaleString('en-US',{maximumFractionDigit
 const cp=n=>n==null?'–':'$'+n.toFixed(1);
 const durB=i=>i.type!=='视频'?'图片':!i.dur?'未知':i.dur<=10?'≤10秒':i.dur<=20?'10–20秒':i.dur<=40?'20–40秒':i.dur<=60?'40–60秒':'60秒以上';
 const ratioB=i=>{const m=(i.size||'').split('x').map(Number);if(m.length<2||!m[1])return'其他';const r=m[0]/m[1];return r<0.6?'9:16 竖屏':r<0.9?'4:5':r<1.1?'1:1 方图':'横屏'};
-let D,AVG,shown=60,sortBy='spend',dir='desc',t10='v';
+let D,AVG,shown=60,sortBy='spend',dir='desc',t10='v',SRC='';
 const lvl=c=>c==null?'none':c<=AVG?'good':c>AVG*1.3?'bad':'mid';
 const chip=c=>`<span class="chip ${lvl(c)==='none'?'mid':lvl(c)}">${cp(c)}</span>`;
 fetch('data.json').then(r=>r.json()).then(d=>{D=d;AVG=d.pan.total.cpi;
@@ -196,15 +183,11 @@ function init(){
   $('#cRatio').innerHTML=bars(P.ratio);$('#cType').innerHTML=bars(P.type);
   scatter();market();inhouse();
   $$('.fold').forEach(b=>b.onclick=()=>{const d=document.getElementById(b.dataset.d);d.open=false;d.scrollIntoView({block:'nearest'})});
-  const opt=(id,vals,all='全部')=>$(id).innerHTML=`<option value="">${all}</option>`+vals.map(v=>`<option>${v}</option>`).join('');
-  const uniq=f=>[...new Set(P.items.map(f))].filter(Boolean);
-  opt('#fSrc',['同盘子','2610W3','2610W4','2610W5','2611W2']);opt('#fScene',[...P.scene.map(x=>x.k),'内部投放']);opt('#fC1',uniq(i=>i.c1));opt('#fC2',P.c2.map(x=>x.k));
-  opt('#fDur',['≤10秒','10–20秒','20–40秒','40–60秒','60秒以上','图片']);opt('#fRatio',['9:16 竖屏','1:1 方图','4:5','横屏']);opt('#fVer',uniq(i=>i.verdict));opt('#fAge',['30天内','31–60天','61–120天','121–180天','180天以上']);
-  ['#fSrc','#fType','#fScene','#fC1','#fC2','#fDur','#fRatio','#fVer','#fAge','#fCpi','#fMin','#fQ','#fPlay'].forEach(s=>$(s).addEventListener('input',()=>{shown=60;wall()}));
-  $$('#sortSeg button').forEach(b=>b.onclick=()=>{$$('#sortSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));sortBy=b.dataset.s;dir=sortBy==='cpi'?'asc':'desc';$$('#dirSeg button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.d===dir));shown=60;wall()});
+  let src='';
+  $$('#srcSeg button').forEach(b=>b.onclick=()=>{$$('#srcSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));SRC=b.dataset.v;shown=60;wall()});
+  $$('#sortSeg button').forEach(b=>b.onclick=()=>{$$('#sortSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));sortBy=b.dataset.s;shown=60;wall()});
   $$('#dirSeg button').forEach(b=>b.onclick=()=>{$$('#dirSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));dir=b.dataset.d;shown=60;wall()});
   $$('[aria-label="借鉴类型"] button').forEach(b=>b.onclick=()=>{$$('[aria-label="借鉴类型"] button').forEach(x=>x.setAttribute('aria-pressed',x===b));t10=b.dataset.k;top10()});
-  $('#reset').onclick=()=>{['#fSrc','#fType','#fScene','#fC1','#fC2','#fDur','#fRatio','#fVer','#fAge','#fCpi','#fQ'].forEach(s=>$(s).value='');$('#fMin').value=200;$('#fPlay').checked=false;shown=60;wall()};
   $('#more').onclick=()=>{shown+=60;wall()};
   top10();wall();
 }
@@ -218,13 +201,11 @@ function top10(){
   bind('#top10 .lcard');
 }
 function wall(){
-  const v=id=>$(id).value,mn=+v('#fMin')||0,q=v('#fQ').trim();
-  let L=D.all.filter(i=>(!v('#fSrc')||i.src===v('#fSrc'))&&(!v('#fType')||i.type===v('#fType'))&&(!v('#fScene')||i.scene===v('#fScene'))&&(!v('#fC1')||i.c1===v('#fC1'))&&(!v('#fC2')||i.c2===v('#fC2'))
-    &&(!v('#fDur')||i.db===v('#fDur'))&&(!v('#fRatio')||i.rb===v('#fRatio'))&&(!v('#fVer')||i.verdict===v('#fVer'))&&(!v('#fAge')||i.ab===v('#fAge'))&&(!v('#fCpi')||lvl(i.cpi)===v('#fCpi'))
-    &&i.spend>=mn&&(!q||(i.cid||'').includes(q)||(i.gid||'').includes(q)||(i.name||'').includes(q))&&(!$('#fPlay').checked||i.v));
-  const key={spend:i=>i.spend,cpi:i=>i.cpi,inst:i=>i.inst??-1,dur:i=>i.dur,up:i=>i.up||'',age:i=>i.age??-1}[sortBy];
-  if(sortBy==='cpi') L=L.filter(i=>i.cpi!=null);
-  L=[...L].sort((a,b)=>{const x=key(a),y=key(b);const c=typeof x==='string'?x.localeCompare(y):x-y;return dir==='asc'?c:-c});
+  let L=D.all.filter(i=>!SRC||(SRC==='同盘子'?i.src==='同盘子':i.src!=='同盘子'));
+  if(sortBy==='cpi') L=L.filter(i=>i.cpi!=null&&i.spend>=200);
+  if(sortBy==='inst') L=L.filter(i=>i.inst!=null);
+  const key={spend:i=>i.spend,cpi:i=>i.cpi,inst:i=>i.inst}[sortBy];
+  L=[...L].sort((a,b)=>dir==='asc'?key(a)-key(b):key(b)-key(a));
   $('#fCount').textContent=L.length+' 条';
   $('#grid').innerHTML=L.slice(0,shown).map(i=>{
     const th=i.t||i.i;
