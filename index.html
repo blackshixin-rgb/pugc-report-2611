@@ -182,7 +182,7 @@ function init(){
   const g=(arr,k)=>arr.find(x=>x.k===k)||{};
   const sv=g(P.scene,'shortvideo'),ip=g(P.scene,'ip'),d1=g(P.dur,'10–20秒'),d6=g(P.dur,'60秒以上'),r9=g(P.ratio,'9:16 竖屏'),img=g(P.type,'图片');
   const cet=P.c2.find(x=>x.k.startsWith('Culture')),life=g(P.c2,'Lifestyle');
-  const IN=D.all.filter(i=>i.src!=='同盘子'&&i.inst!=null),iS=IN.reduce((a,i)=>a+i.spend,0),iI=IN.reduce((a,i)=>a+i.inst,0),iC=iI?iS/iI:null;
+  const IN=D.all.filter(i=>i.src!=='同盘子'&&i.src!=='2611W2'&&i.inst>0&&i.cpi>0),iS=IN.reduce((a,i)=>a+i.spend,0),iI=IN.reduce((a,i)=>a+i.inst,0),iC=iI?iS/iI:null;
   const w2s=D.all.filter(i=>i.src==='2611W2').reduce((a,i)=>a+i.spend,0);
   const W2=D.w2,w2all=W2.reduce((a,i)=>a+i.spend,0);
   $('#kpis2').innerHTML=[['条素材',fi(W2.length)],['消耗',fmt(w2all)],['新增用户','表里没有'],['平均 CPI','表里没有']].map(([a,b])=>`<div class="kpi"><b class="num">${b}</b><span>${a}</span></div>`).join('');
