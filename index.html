@@ -108,7 +108,7 @@ details summary{cursor:pointer;font-weight:700}
     <span class="mute">飞书「数据反馈」表 11-17 导出</span>
     <div class="mute" style="font-size:12px">同盘子（美区大盘）</div>
     <div class="kpis" id="kpis"></div>
-    <div class="mute" style="font-size:12px">内部投放（2610W3–W5 去重后，消耗 = 新增 × CPI）</div>
+    <div class="mute" style="font-size:12px">内部投放 2611W2（表里只有消耗，没有新增和 CPI）</div>
     <div class="kpis" id="kpis2"></div>
   </div>
   <div class="blk"><h2>结论</h2><ol class="pts" id="pts"></ol></div>
@@ -184,10 +184,11 @@ function init(){
   const cet=P.c2.find(x=>x.k.startsWith('Culture')),life=g(P.c2,'Lifestyle');
   const IN=D.all.filter(i=>i.src!=='同盘子'&&i.inst!=null),iS=IN.reduce((a,i)=>a+i.spend,0),iI=IN.reduce((a,i)=>a+i.inst,0),iC=iI?iS/iI:null;
   const w2s=D.all.filter(i=>i.src==='2611W2').reduce((a,i)=>a+i.spend,0);
-  $('#kpis2').innerHTML=[['条素材',fi(IN.length)],['消耗',fmt(iS)],['新增',fi(iI)],['平均 CPI',cp(iC)]].map(([a,b])=>`<div class="kpi"><b class="num">${b}</b><span>${a}</span></div>`).join('');
+  const W2=D.w2,w2all=W2.reduce((a,i)=>a+i.spend,0);
+  $('#kpis2').innerHTML=[['条素材',fi(W2.length)],['消耗',fmt(w2all)],['新增','表里没有'],['平均 CPI','表里没有']].map(([a,b])=>`<div class="kpi"><b class="num">${b}</b><span>${a}</span></div>`).join('');
   const inGood=IN.filter(i=>i.cpi<=AVG).length;
   $('#pts').innerHTML=[
-    `<b>内部投放比大盘便宜得多</b>：${IN.length} 条平均 CPI ${cp(iC)}，大盘 ${cp(T.cpi)}；${inGood} 条低于大盘均值，跑得最好的是顶部字幕＋反应图的情侣梗（另有 2611W2 只给消耗的 ${fmt(w2s)} 未计入 CPI）`,
+    `<b>内部投放比大盘便宜得多</b>：10 月 W3–W5 去重后 ${IN.length} 条平均 CPI ${cp(iC)}，大盘 ${cp(T.cpi)}；跑得最好的是顶部字幕＋反应图的情侣梗`,
     `<b>钱很集中</b>：前 10 条吃掉 ${(P.top10share*100).toFixed(0)}% 的消耗。第 1、5 名都是真人对镜讲 TikTok Pro 赚积分换券，合计 ${fmt(P.items[0].spend+P.items[4].spend)}`,
     `<b>shortvideo 最划算</b>：CPI ${cp(sv.cpi)}，ip 类 ${cp(ip.cpi)}。ip 里跑得动的是带搜索框的 NFL 集锦`,
     `<b>10–20 秒最好</b>：花了 ${(d1.spend/T.spend*100).toFixed(0)}% 的钱，CPI ${cp(d1.cpi)}；60 秒以上 ${cp(d6.cpi)}`,
