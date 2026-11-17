@@ -1,0 +1,224 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><style>[hidden]{display:none!important}body{margin:0}</style></head><body>
+<title>PUGC 投放素材盘点</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap">
+<style>
+/* 布局：数据驾驶舱，密度 8；顶部结论条 → 图表两栏 → 素材墙 → 大盘 → 内部投放。圆角 0/2，单强调色 */
+/* 旋钮：变化度 5 · 动效 1 · 密度 8 */
+:root{
+  --bg:#f3f4f1; --paper:#fbfbf9; --fg:#16212b; --mute:#5b6670; --line:#d9ddd6; --soft:#e8ebe5;
+  --accent:#0b7a6e; --accent-soft:#d3ebe6; --warn:#b4521e;
+  --f-body:"Noto Sans SC","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --f-num:"IBM Plex Sans Condensed","Noto Sans SC",system-ui,sans-serif;
+  --s1:4px;--s2:8px;--s3:12px;--s4:16px;--s5:24px;--s6:32px;--s7:48px;
+  --t1:12px;--t2:14px;--t3:17px;--t4:21px;--t5:32px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#12181d;--paper:#182027;--fg:#e4e8e3;--mute:#9aa5ad;--line:#2c3740;--soft:#212b33;
+  --accent:#4fbfae;--accent-soft:#1d3a37;--warn:#e08a5c;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12181d;--paper:#182027;--fg:#e4e8e3;--mute:#9aa5ad;--line:#2c3740;--soft:#212b33;
+  --accent:#4fbfae;--accent-soft:#1d3a37;--warn:#e08a5c;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:400 var(--t2)/1.55 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:var(--s5) var(--s7)}
+.wrap{max-width:1440px;margin:0 auto;display:flex;flex-direction:column;gap:var(--s6)}
+h1{font:700 var(--t5)/1.15 var(--f-body);margin:0;text-wrap:balance}
+h2{font:700 var(--t4)/1.25 var(--f-body);margin:0;text-wrap:balance}
+h3{font:700 var(--t3)/1.3 var(--f-body);margin:0}
+.mute{color:var(--mute)}
+.num{font-family:var(--f-num);font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);
+  display:flex;gap:var(--s4);flex-wrap:wrap;padding-block:var(--s2)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+nav a{text-decoration:none;color:var(--mute);font-weight:500}
+nav a:hover,nav a:focus-visible{color:var(--fg)}
+header{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:var(--s5);align-items:end}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid var(--fg)}
+.kpi{padding:var(--s3) var(--s3) 0 0}
+.kpi b{display:block;font:600 var(--t5)/1 var(--f-num);font-variant-numeric:tabular-nums}
+.kpi span{font-size:var(--t1);color:var(--mute)}
+.finds{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;border-top:1px solid var(--line)}
+.finds div{padding:var(--s3) var(--s4) var(--s3) 0;border-bottom:1px solid var(--line)}
+.finds b{color:var(--accent)}
+section{display:flex;flex-direction:column;gap:var(--s4);scroll-margin-top:var(--s7)}
+.sechead{display:flex;justify-content:space-between;align-items:baseline;gap:var(--s4);flex-wrap:wrap;border-bottom:2px solid var(--fg);padding-bottom:var(--s2)}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:var(--s5)}
+.chart{background:var(--paper);border:1px solid var(--line);padding:var(--s4);display:flex;flex-direction:column;gap:var(--s3);min-width:0}
+.bars{display:grid;grid-template-columns:minmax(90px,170px) minmax(0,1fr) 64px 58px;gap:var(--s1) var(--s3);align-items:center;font-size:var(--t1)}
+.bars .lab{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bars .track{height:14px;background:var(--soft);position:relative}
+.bars .fill{position:absolute;inset:0 auto 0 0;background:var(--accent)}
+.bars .r{text-align:right}
+.bars .cpi.bad{color:var(--warn);font-weight:700}
+.bars .hd{color:var(--mute);font-size:var(--t1)}
+.legend{font-size:var(--t1);color:var(--mute)}
+.filters{display:flex;gap:var(--s2);flex-wrap:wrap;align-items:center}
+select,button{font:inherit;font-size:var(--t1);background:var(--paper);color:var(--fg);border:1px solid var(--line);border-radius:2px;padding:var(--s1) var(--s2)}
+button{cursor:pointer}
+button:focus-visible,select:focus-visible,.card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:var(--s3)}
+.card{background:var(--paper);border:1px solid var(--line);display:flex;flex-direction:column;cursor:pointer;min-width:0}
+.card .m{aspect-ratio:9/14;background:var(--soft);position:relative;overflow:hidden}
+.card .m img{width:100%;height:100%;object-fit:cover;display:block}
+.card .m .tag{position:absolute;left:0;top:0;background:var(--fg);color:var(--bg);font:600 var(--t1)/1 var(--f-num);padding:var(--s1) var(--s2)}
+.card .m .none{position:absolute;inset:0;display:grid;place-items:center;color:var(--mute);font-size:var(--t1);text-align:center;padding:var(--s3)}
+.card .b{padding:var(--s2);display:flex;flex-direction:column;gap:2px;font-size:var(--t1)}
+.card .b .top{display:flex;justify-content:space-between;gap:var(--s2)}
+.card .b .sp{font:600 var(--t3)/1.1 var(--f-num)}
+.pill{display:inline-block;font-size:var(--t1);padding:0 var(--s1);border:1px solid var(--accent);color:var(--accent);border-radius:2px}
+.more{align-self:center}
+.tbl{overflow-x:auto;border:1px solid var(--line);background:var(--paper)}
+table{border-collapse:collapse;width:100%;font-size:var(--t1)}
+th,td{padding:var(--s1) var(--s2);text-align:left;white-space:nowrap}
+th{position:sticky;top:0;background:var(--soft);font-weight:700}
+tbody tr+tr td{border-top:1px solid var(--soft)}
+td.n{text-align:right;font-family:var(--f-num);font-variant-numeric:tabular-nums}
+td img{width:44px;height:58px;object-fit:cover;display:block;cursor:zoom-in}
+.heat{display:inline-block;min-width:36px;text-align:right;padding:0 var(--s1)}
+.samples{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:var(--s2)}
+.samples img{width:100%;aspect-ratio:9/14;object-fit:cover;cursor:zoom-in;background:var(--soft);display:block}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:var(--s5)}
+#lb{position:fixed;inset:0;background:rgba(18,24,29,.9);z-index:20;display:flex;align-items:center;justify-content:center;gap:var(--s5);
+  padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));flex-wrap:wrap}
+#lb .media{max-height:86vh;max-width:min(92vw,560px)}
+#lb video,#lb img{max-height:86vh;max-width:100%;display:block;background:#12181d}
+#lb .info{color:#e4e8e3;max-width:340px;display:flex;flex-direction:column;gap:var(--s2);font-size:var(--t2)}
+#lb .info a{color:#4fbfae}
+#lb .x{position:absolute;top:max(12px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));background:transparent;color:#e4e8e3;border:1px solid #e4e8e3;font-size:var(--t2)}
+@media (max-width:720px){header{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.bars{grid-template-columns:minmax(80px,120px) minmax(0,1fr) 56px 48px}}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style>
+
+<div class="wrap">
+<nav aria-label="页面目录"><a href="#pan">同盘子素材</a><a href="#wall">素材墙</a><a href="#market">大盘在投什么</a><a href="#inhouse">内部投放周表</a></nav>
+
+<header>
+  <div>
+    <h1>PUGC 投放素材盘点</h1>
+    <p class="mute">数据来自飞书「投放数据」表的 8 张分表，2026-11-17 导出。美区「同盘子其他素材」702 条有消耗和新增，是判断哪类素材受欢迎的主数据；三张「大盘」只有素材类型和地区；四张「内部投放」是每周自投的效果。</p>
+  </div>
+  <div class="kpis" id="kpis"></div>
+</header>
+
+<div class="finds" id="finds"></div>
+
+<section id="pan">
+  <div class="sechead"><h2>同盘子素材：钱花在哪类内容上</h2><span class="legend">条形 = 消耗；右侧数字 = 消耗 / CPI（每个新增的成本，越低越好，高于均值 1.5 倍标橙）</span></div>
+  <div class="charts" id="charts"></div>
+</section>
+
+<section id="wall">
+  <div class="sechead"><h2>素材墙</h2><span class="legend" id="wallnote"></span></div>
+  <div class="filters">
+    <select id="fScene" aria-label="场景"></select>
+    <select id="fC2" aria-label="二级分类"></select>
+    <select id="fType" aria-label="类型"><option value="">视频和图片</option><option>视频</option><option>图片</option></select>
+    <select id="fSort" aria-label="排序"><option value="spend">按消耗</option><option value="cpi">按 CPI 从低到高（新增≥10）</option><option value="inst">按新增</option></select>
+    <span class="legend" id="fCount"></span>
+  </div>
+  <div class="grid" id="grid"></div>
+  <button class="more" id="more">再看 60 条</button>
+</section>
+
+<section id="market">
+  <div class="sechead"><h2>大盘在投什么</h2><span class="legend">这三张表没有消耗，只能看各类素材的条数占比和样例</span></div>
+  <div class="two" id="mkt"></div>
+  <div id="mktSamples" style="display:flex;flex-direction:column;gap:var(--s4)"></div>
+</section>
+
+<section id="inhouse">
+  <div class="sechead"><h2>内部投放周表</h2><span class="legend">2611W2 有消耗，2610W3–W5 有新增和 CPI；点缩略图看大图或视频</span></div>
+  <div class="two">
+    <div class="chart"><h3>2611W2 各素材消耗（多国合计）</h3><div class="tbl" style="max-height:520px;overflow:auto"><table id="tW2"></table></div></div>
+    <div class="chart"><h3>2610W3–W5 自投素材效果</h3><div class="tbl" style="max-height:520px;overflow:auto"><table id="tIn"></table></div></div>
+  </div>
+</section>
+</div>
+
+<div id="lb" hidden role="dialog" aria-modal="true" aria-label="素材预览"><button class="x" id="lbx">关闭</button><div class="media" id="lbm"></div><div class="info" id="lbi"></div></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const fmt=n=>n==null?'–':n>=1000?'$'+(n/1000).toFixed(n>=100000?0:1)+'k':'$'+Math.round(n);
+const fi=n=>n==null?'–':Number(n).toLocaleString('en-US',{maximumFractionDigits:0});
+const cp=n=>n==null?'–':'$'+n.toFixed(1);
+let D;
+fetch('data.json').then(r=>r.json()).then(d=>{D=d;init()});
+function init(){
+  const P=D.pan,T=P.total;
+  $('#kpis').innerHTML=[['素材条数',fi(T.n)],['消耗',fmt(T.spend)],['新增用户',fi(T.inst)],['平均 CPI',cp(T.cpi)]].map(([a,b])=>`<div class="kpi"><b class="num">${b}</b><span>${a}</span></div>`).join('');
+  const sv=P.scene.find(x=>x.k==='shortvideo'),ip=P.scene.find(x=>x.k==='ip');
+  const d1=P.dur.find(x=>x.k==='10–20秒'),d6=P.dur.find(x=>x.k==='60秒以上');
+  const r916=P.ratio.find(x=>x.k==='9:16 竖屏'),img=P.type.find(x=>x.k==='图片');
+  const cet=P.c2.find(x=>x.k.startsWith('Culture')),life=P.c2.find(x=>x.k==='Lifestyle');
+  const won=P.items.filter(i=>i.verdict&&i.verdict!=='无效素材').length;
+  $('#finds').innerHTML=[
+    `<b>钱高度集中</b>：消耗前 10 条拿走 ${(P.top10share*100).toFixed(0)}%，702 条里只有 ${won} 条被判为起量或有效。第 1、5 条都是真人对镜头讲 TikTok Pro 赚积分换券，合计 ${fmt(P.items[0].spend+P.items[4].spend)}。`,
+    `<b>shortvideo 最划算</b>：${sv.n} 条占 ${(sv.spend/T.spend*100).toFixed(0)}% 消耗，CPI ${cp(sv.cpi)}；ip 类 ${ip.n} 条 CPI ${cp(ip.cpi)}。第 2、3 条是带搜索框的 NFL 集锦，合计 ${fmt(P.items[1].spend+P.items[2].spend)}。`,
+    `<b>10–20 秒最好跑</b>：花了 ${(d1.spend/T.spend*100).toFixed(0)}% 的钱，CPI ${cp(d1.cpi)}；60 秒以上 CPI ${cp(d6.cpi)}，贵一倍多。`,
+    `<b>竖屏是主力，图片便宜但量小</b>：9:16 占 ${(r916.spend/T.spend*100).toFixed(0)}% 消耗；图片 ${img.n} 条只花 ${fmt(img.spend)}，CPI ${cp(img.cpi)} 反而最低。`,
+    `<b>分类里</b>：Culture & Education & Technology CPI ${cp(cet.cpi)}，Sports & Outdoors 消耗最大；Lifestyle CPI ${cp(life.cpi)}，是均值的 ${(life.cpi/T.cpi).toFixed(1)} 倍。`
+  ].map(t=>`<div>${t}</div>`).join('');
+  const charts=[['场景',P.scene],['二级分类（前 14）',P.c2.slice(0,14)],['时长',P.dur],['画幅',P.ratio],['类型',P.type]];
+  $('#charts').innerHTML=charts.map(([t,rows])=>chart(t,rows,T)).join('');
+  // filters
+  const opts=(arr,all)=>`<option value="">${all}</option>`+arr.map(x=>`<option>${x.k}</option>`).join('');
+  $('#fScene').innerHTML=opts(P.scene,'全部场景');$('#fC2').innerHTML=opts(P.c2,'全部二级分类');
+  ['#fScene','#fC2','#fType','#fSort'].forEach(s=>$(s).addEventListener('change',()=>{shown=60;wall()}));
+  $('#more').addEventListener('click',()=>{shown+=60;wall()});
+  const hv=P.items.filter(i=>i.v).length;
+  $('#wallnote').textContent=`消耗前 ${hv} 条视频可直接播放；其余点开后有变色龙链接（需登录变色龙）`;
+  wall();market();inhouse();
+}
+function chart(title,rows,T){
+  const max=Math.max(...rows.map(r=>r.spend));
+  return `<div class="chart"><h3>${title}</h3><div class="bars"><span class="hd">分类</span><span class="hd">消耗</span><span class="hd r">消耗</span><span class="hd r">CPI</span>`+
+  rows.map(r=>`<span class="lab" title="${r.k}">${r.k} <span class="mute">${r.n}条</span></span><span class="track"><span class="fill" style="width:${(r.spend/max*100).toFixed(1)}%"></span></span><span class="r num">${fmt(r.spend)}</span><span class="r num cpi ${r.cpi&&r.cpi>T.cpi*1.5?'bad':''}">${cp(r.cpi)}</span>`).join('')+`</div></div>`;
+}
+let shown=60;
+function wall(){
+  const s=$('#fScene').value,c=$('#fC2').value,t=$('#fType').value,o=$('#fSort').value;
+  let L=D.pan.items.filter(i=>(!s||i.scene===s)&&(!c||i.c2===c)&&(!t||i.type===t));
+  if(o==='cpi') L=L.filter(i=>i.inst>=10).sort((a,b)=>a.cpi-b.cpi); else if(o==='inst') L=[...L].sort((a,b)=>b.inst-a.inst);
+  $('#fCount').textContent=`${L.length} 条`;
+  $('#grid').innerHTML=L.slice(0,shown).map((i,k)=>{
+    const th=i.t||i.i;
+    const m=th?`<img loading="lazy" src="${th}" alt="${i.c2} 素材封面">`:`<div class="none">${i.type}<br>点开到变色龙查看</div>`;
+    return `<div class="card" tabindex="0" data-cid="${i.cid}"><div class="m">${m}<span class="tag">${i.v?"视频 ":""}#${D.pan.items.indexOf(i)+1}</span></div><div class="b"><div class="top"><span class="sp num">${fmt(i.spend)}</span><span class="num mute">CPI ${cp(i.cpi)}</span></div><span>${i.scene} / ${i.c2}</span><span class="mute">${i.type}${i.dur?` ${i.dur}秒`:''} ${i.size}${i.verdict&&i.verdict!=='无效素材'?` <span class="pill">${i.verdict}</span>`:''}</span></div></div>`}).join('');
+  $('#more').hidden=L.length<=shown;
+  document.querySelectorAll('.card').forEach(el=>{const go=()=>openItem(D.pan.items.find(x=>x.cid===el.dataset.cid));el.onclick=go;el.onkeydown=e=>{if(e.key==='Enter')go()}});
+}
+function openItem(i){
+  let m='';
+  if(i.v) m=`<video src="${i.v}" controls autoplay muted playsinline></video>`;
+  else if(i.i) m=`<img src="${i.i}" alt="素材大图">`;
+  else m=`<div style="color:#e4e8e3;padding:24px">这条没有存到本页，点右侧变色龙链接查看</div>`;
+  lb(m,`<b class="num" style="font-size:21px">${fmt(i.spend)}</b><span>新增 ${fi(i.inst)}，CPI ${cp(i.cpi)}</span><span>${i.scene} / ${i.c1} / ${i.c2}</span><span>${i.type} ${i.size}${i.dur?`，${i.dur} 秒`:""}，上传 ${i.up}</span><span>${i.verdict||''} ${i.seg?`（成本${i.seg}）`:''}</span>${i.gid?`<a href="https://www.tiktok.com/@/video/${i.gid}" target="_blank" rel="noopener">TikTok 原帖 ${i.gid}</a>`:''}${i.url?`<a href="${i.url}" target="_blank" rel="noopener">在变色龙打开原片（需登录）</a>`:''}<span class="mute" style="color:#9aa5ad">CID ${i.cid}</span>`);
+}
+function lb(m,info){$('#lbm').innerHTML=m;$('#lbi').innerHTML=info;$('#lb').hidden=false;$('#lbx').focus()}
+function closeLb(){$('#lb').hidden=true;$('#lbm').innerHTML=''}
+$('#lbx').onclick=closeLb;$('#lb').onclick=e=>{if(e.target.id==='lb')closeLb()};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb()});
+function market(){
+  const html=Object.values(D.dp).map(s=>{
+    const max=Math.max(...s.scene.map(x=>x[1]));
+    return `<div class="chart"><h3>${s.name} <span class="mute">${fi(s.n)} 条</span></h3><div class="bars" style="grid-template-columns:minmax(90px,150px) minmax(0,1fr) 52px 52px"><span class="hd">素材类型</span><span class="hd">条数</span><span class="hd r">条数</span><span class="hd r">占比</span>`+
+    s.scene.map(([k,v])=>`<span class="lab">${k}</span><span class="track"><span class="fill" style="width:${(v/max*100).toFixed(1)}%"></span></span><span class="r num">${fi(v)}</span><span class="r num">${(v/s.n*100).toFixed(0)}%</span>`).join('')+
+    `</div><span class="legend">地区前几：${s.region.slice(0,6).map(([k,v])=>`${k==='NULL'?'未填':k} ${v}`).join('，')}</span></div>`}).join('');
+  $('#mkt').innerHTML=html;
+  const sm=D.dp.vukoLd.samples;
+  $('#mktSamples').innerHTML='<h3>大盘 10/26–10/31 各类型样例（点开放大）</h3>'+Object.entries(sm).map(([k,arr])=>`<div><div class="legend" style="margin-bottom:4px">${k}</div><div class="samples">${arr.map(a=>`<img loading="lazy" src="${a.i}" alt="${k} 样例" data-v="${a.v}" data-rg="${a.rg}">`).join('')}</div></div>`).join('');
+  document.querySelectorAll('.samples img').forEach(el=>el.onclick=()=>lb(`<img src="${el.getAttribute('src')}" alt="样例大图">`,`<span>${el.alt}</span><span>地区 ${el.dataset.rg}</span>${el.dataset.v?`<a href="${el.dataset.v}" target="_blank" rel="noopener">在变色龙打开视频（需登录）</a>`:''}`));
+}
+function inhouse(){
+  const th=(a)=>a.t||a.i;
+  $('#tW2').innerHTML='<thead><tr><th></th><th>素材</th><th>国家</th><th>消耗</th></tr></thead><tbody>'+D.w2.map((a,k)=>`<tr><td>${th(a)?`<img loading="lazy" src="${th(a)}" alt="封面" data-k="w${k}">`:''}</td><td>${a.name}</td><td>${a.regs.join(' ')}</td><td class="n">${fmt(a.spend)}</td></tr>`).join('')+'</tbody>';
+  const L=[...D.inw].sort((a,b)=>b.inst-a.inst);
+  $('#tIn').innerHTML='<thead><tr><th></th><th>周</th><th>素材</th><th>新增</th><th>CPI</th><th>判断</th></tr></thead><tbody>'+L.map((a,k)=>`<tr><td>${th(a)?`<img loading="lazy" src="${th(a)}" alt="封面" data-k="i${k}">`:''}</td><td>${a.wk}</td><td>${(a.name||a.tag||a.cid).slice(0,34)}</td><td class="n">${fi(a.inst)}</td><td class="n">${cp(a.cpi)}</td><td>${a.ver}</td></tr>`).join('')+'</tbody>';
+  const pick=k=>k[0]==='w'?D.w2[+k.slice(1)]:L[+k.slice(1)];
+  document.querySelectorAll('#tW2 img,#tIn img').forEach(el=>el.onclick=()=>{const a=pick(el.dataset.k);
+    lb(a.v?`<video src="${a.v}" controls autoplay muted playsinline></video>`:`<img src="${a.i||a.t}" alt="封面大图">`,`<span>${a.wk} ${a.name||a.tag||''}</span>${a.spend!=null?`<b class="num">${fmt(a.spend)}</b>`:`<span>新增 ${fi(a.inst)}，CPI ${cp(a.cpi)}</span>`}${a.url?`<a href="${a.url}" target="_blank" rel="noopener">在变色龙打开视频（需登录）</a>`:''}`)});
+}
+</script>
+</body></html>
