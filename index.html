@@ -114,8 +114,8 @@ details summary{cursor:pointer;font-weight:700}
   <div class="blk"><h2>按时长</h2><div id="cDur"></div></div>
   <div class="blk"><h2>按二级分类（前 12）</h2><div id="cC2"></div></div>
   <div class="blk"><h2>按画幅与类型</h2><div id="cRatio"></div><div id="cType"></div></div>
-  <details class="blk"><summary>大盘在投什么（只有条数）</summary><div id="mkt" style="display:flex;flex-direction:column;gap:var(--s4);margin-top:var(--s3)"></div></details>
-  <details class="blk"><summary>内部投放周表</summary><div style="display:flex;flex-direction:column;gap:var(--s3);margin-top:var(--s3)"><div class="tbl"><table id="tW2"></table></div><div class="tbl"><table id="tIn"></table></div></div></details>
+  <details class="blk" id="dMkt"><summary>大盘在投什么（只有条数）</summary><div id="mkt" style="display:flex;flex-direction:column;gap:var(--s4);margin-top:var(--s3)"></div><button class="reset fold" data-d="dMkt">收起</button></details>
+  <details class="blk" id="dIn"><summary>内部投放周表（也已并入右侧素材墙）</summary><div style="display:flex;flex-direction:column;gap:var(--s3);margin-top:var(--s3)"><div class="tbl"><table id="tW2"></table></div><div class="tbl"><table id="tIn"></table></div><button class="reset fold" data-d="dIn">收起</button></div></details>
 </aside>
 
 <main class="right">
@@ -133,6 +133,7 @@ details summary{cursor:pointer;font-weight:700}
       <span class="seg" role="group" aria-label="方向" id="dirSeg"><button data-d="desc" aria-pressed="true">高→低</button><button data-d="asc" aria-pressed="false">低→高</button></span>
     </div>
     <div class="filters">
+      <label>来源<select id="fSrc"></select></label>
       <label>类型<select id="fType"><option value="">全部</option><option>视频</option><option>图片</option></select></label>
       <label>场景<select id="fScene"></select></label>
       <label>一级分类<select id="fC1"></select></label>
@@ -159,12 +160,19 @@ const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
 const fmt=n=>n==null?'–':n>=1000?'$'+(n/1000).toFixed(n>=100000?0:1)+'k':'$'+Math.round(n);
 const fi=n=>n==null?'–':Number(n).toLocaleString('en-US',{maximumFractionDigits:0});
 const cp=n=>n==null?'–':'$'+n.toFixed(1);
-const durB=i=>i.type!=='视频'?'图片':i.dur<=10?'≤10秒':i.dur<=20?'10–20秒':i.dur<=40?'20–40秒':i.dur<=60?'40–60秒':'60秒以上';
+const durB=i=>i.type!=='视频'?'图片':!i.dur?'未知':i.dur<=10?'≤10秒':i.dur<=20?'10–20秒':i.dur<=40?'20–40秒':i.dur<=60?'40–60秒':'60秒以上';
 const ratioB=i=>{const m=(i.size||'').split('x').map(Number);if(m.length<2||!m[1])return'其他';const r=m[0]/m[1];return r<0.6?'9:16 竖屏':r<0.9?'4:5':r<1.1?'1:1 方图':'横屏'};
 let D,AVG,shown=60,sortBy='spend',dir='desc',t10='v';
 const lvl=c=>c==null?'none':c<=AVG?'good':c>AVG*1.3?'bad':'mid';
 const chip=c=>`<span class="chip ${lvl(c)==='none'?'mid':lvl(c)}">${cp(c)}</span>`;
-fetch('data.json').then(r=>r.json()).then(d=>{D=d;AVG=d.pan.total.cpi;D.pan.items.forEach((i,k)=>{i.rank=k+1;i.db=durB(i);i.rb=ratioB(i);i.age=i.up?Math.round((Date.parse('2026-11-17')-Date.parse(i.up))/864e5):null;i.ab=ageB(i.age)});init()});
+fetch('data.json').then(r=>r.json()).then(d=>{D=d;AVG=d.pan.total.cpi;
+  D.pan.items.forEach((i,k)=>{i.rank=k+1;i.src='同盘子';i.lab='#'+(k+1)});
+  const tagSplit=t=>{const p=(t||'').split(' / ');return [p[0]||'未标',p[1]||p[0]||'未标']};
+  const inw=D.inw.map(a=>{const [c1,c2]=tagSplit(a.tag);const nm=(a.name||'');return {...a,src:a.wk,lab:a.wk.slice(4),type:/图片/.test(nm)?'图片':'视频',spend:Math.round(a.inst*a.cpi*100)/100,scene:'内部投放',c1,c2,verdict:a.ver,size:'',dur:0,up:'',gid:''}});
+  const w2=D.w2.map(a=>({...a,src:'2611W2',lab:'W2',type:/图片/.test(a.name)?'图片':'视频',inst:null,cpi:null,scene:'内部投放',c1:'未标',c2:'未标',verdict:'',size:'',dur:0,up:'',gid:'',ver:''}));
+  D.all=[...D.pan.items,...inw,...w2];
+  D.all.forEach((i,k)=>{i.ix=k;i.db=durB(i);i.rb=ratioB(i);i.age=i.up?Math.round((Date.parse('2026-11-17')-Date.parse(i.up))/864e5):null;i.ab=ageB(i.age)});
+  init()});
 function ageB(a){return a==null?'未知':a<=30?'30天内':a<=60?'31–60天':a<=120?'61–120天':a<=180?'121–180天':'180天以上'}
 function bars(rows){
   const max=Math.max(...rows.map(r=>r.spend));
@@ -187,46 +195,47 @@ function init(){
   $('#cScene').innerHTML=bars(P.scene.filter(x=>x.spend>0));$('#cDur').innerHTML=bars(P.dur);$('#cC2').innerHTML=bars(P.c2.slice(0,12));
   $('#cRatio').innerHTML=bars(P.ratio);$('#cType').innerHTML=bars(P.type);
   scatter();market();inhouse();
+  $$('.fold').forEach(b=>b.onclick=()=>{const d=document.getElementById(b.dataset.d);d.open=false;d.scrollIntoView({block:'nearest'})});
   const opt=(id,vals,all='全部')=>$(id).innerHTML=`<option value="">${all}</option>`+vals.map(v=>`<option>${v}</option>`).join('');
   const uniq=f=>[...new Set(P.items.map(f))].filter(Boolean);
-  opt('#fScene',P.scene.map(x=>x.k));opt('#fC1',uniq(i=>i.c1));opt('#fC2',P.c2.map(x=>x.k));
+  opt('#fSrc',['同盘子','2610W3','2610W4','2610W5','2611W2']);opt('#fScene',[...P.scene.map(x=>x.k),'内部投放']);opt('#fC1',uniq(i=>i.c1));opt('#fC2',P.c2.map(x=>x.k));
   opt('#fDur',['≤10秒','10–20秒','20–40秒','40–60秒','60秒以上','图片']);opt('#fRatio',['9:16 竖屏','1:1 方图','4:5','横屏']);opt('#fVer',uniq(i=>i.verdict));opt('#fAge',['30天内','31–60天','61–120天','121–180天','180天以上']);
-  ['#fType','#fScene','#fC1','#fC2','#fDur','#fRatio','#fVer','#fAge','#fCpi','#fMin','#fQ','#fPlay'].forEach(s=>$(s).addEventListener('input',()=>{shown=60;wall()}));
+  ['#fSrc','#fType','#fScene','#fC1','#fC2','#fDur','#fRatio','#fVer','#fAge','#fCpi','#fMin','#fQ','#fPlay'].forEach(s=>$(s).addEventListener('input',()=>{shown=60;wall()}));
   $$('#sortSeg button').forEach(b=>b.onclick=()=>{$$('#sortSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));sortBy=b.dataset.s;dir=sortBy==='cpi'?'asc':'desc';$$('#dirSeg button').forEach(x=>x.setAttribute('aria-pressed',x.dataset.d===dir));shown=60;wall()});
   $$('#dirSeg button').forEach(b=>b.onclick=()=>{$$('#dirSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));dir=b.dataset.d;shown=60;wall()});
   $$('[aria-label="借鉴类型"] button').forEach(b=>b.onclick=()=>{$$('[aria-label="借鉴类型"] button').forEach(x=>x.setAttribute('aria-pressed',x===b));t10=b.dataset.k;top10()});
-  $('#reset').onclick=()=>{['#fType','#fScene','#fC1','#fC2','#fDur','#fRatio','#fVer','#fAge','#fCpi','#fQ'].forEach(s=>$(s).value='');$('#fMin').value=200;$('#fPlay').checked=false;shown=60;wall()};
+  $('#reset').onclick=()=>{['#fSrc','#fType','#fScene','#fC1','#fC2','#fDur','#fRatio','#fVer','#fAge','#fCpi','#fQ'].forEach(s=>$(s).value='');$('#fMin').value=200;$('#fPlay').checked=false;shown=60;wall()};
   $('#more').onclick=()=>{shown+=60;wall()};
   top10();wall();
 }
 function top10(){
   const P=D.pan,seen=new Set();
   const V=t10==='v';
-  const L=P.items.filter(i=>(V?i.type==='视频'&&i.spend>=1500:i.type==='图片'&&i.spend>=150)&&i.cpi!=null&&i.cpi<=AVG)
+  const L=D.all.filter(i=>(V?i.type==='视频'&&i.spend>=1000:i.type==='图片'&&i.spend>=150)&&i.cpi!=null&&i.cpi<=AVG)
     .sort((x,y)=>x.cpi-y.cpi).filter(i=>{const k=i.spend+'|'+i.cpi;if(seen.has(k))return false;seen.add(k);return true}).slice(0,10);
-  $('#t10note').textContent=V?'消耗过 $1,500 且 CPI 低于均值，按 CPI 从低到高':'消耗过 $150 且 CPI 低于均值，按 CPI 从低到高（符合条件的只有这些）';
-  $('#top10').innerHTML=L.map((i,k)=>`<div class="lcard" tabindex="0" data-r="${i.rank}"><div class="m">${(i.t||i.i)?`<img loading="lazy" src="${i.t||i.i}" alt="${i.c2}">`:''}<span class="rk">${k+1}</span><span class="play">${i.v?'播放':'放大'}</span></div><div class="b"><div class="nums"><b>${fmt(i.spend)}</b>${chip(i.cpi)}</div><span class="sub">${i.scene} / ${i.c2}</span><span class="sub">${i.dur?Math.round(i.dur)+' 秒，':''}低于均值 ${Math.round((1-i.cpi/AVG)*100)}%</span><span class="sub">${i.up?i.up.slice(5)+' 上传，上传至今 '+i.age+' 天':''}</span></div></div>`).join('');
+  $('#t10note').textContent=(V?'消耗过 $1,000':'消耗过 $150')+' 且 CPI 低于同盘子均值，含同盘子和内部投放，按 CPI 从低到高';
+  $('#top10').innerHTML=L.map((i,k)=>`<div class="lcard" tabindex="0" data-r="${i.ix}"><div class="m">${(i.t||i.i)?`<img loading="lazy" src="${i.t||i.i}" alt="${i.c2}">`:''}<span class="rk">${k+1}</span><span class="play">${i.v?'播放':'放大'}</span></div><div class="b"><div class="nums"><b>${fmt(i.spend)}</b>${chip(i.cpi)}</div><span class="sub">${i.src==="同盘子"?i.scene:i.src} / ${i.c2}</span><span class="sub">${i.dur?Math.round(i.dur)+' 秒，':''}低于均值 ${Math.round((1-i.cpi/AVG)*100)}%</span><span class="sub">${i.up?i.up.slice(5)+' 上传，上传至今 '+i.age+' 天':''}</span></div></div>`).join('');
   bind('#top10 .lcard');
 }
 function wall(){
   const v=id=>$(id).value,mn=+v('#fMin')||0,q=v('#fQ').trim();
-  let L=D.pan.items.filter(i=>(!v('#fType')||i.type===v('#fType'))&&(!v('#fScene')||i.scene===v('#fScene'))&&(!v('#fC1')||i.c1===v('#fC1'))&&(!v('#fC2')||i.c2===v('#fC2'))
+  let L=D.all.filter(i=>(!v('#fSrc')||i.src===v('#fSrc'))&&(!v('#fType')||i.type===v('#fType'))&&(!v('#fScene')||i.scene===v('#fScene'))&&(!v('#fC1')||i.c1===v('#fC1'))&&(!v('#fC2')||i.c2===v('#fC2'))
     &&(!v('#fDur')||i.db===v('#fDur'))&&(!v('#fRatio')||i.rb===v('#fRatio'))&&(!v('#fVer')||i.verdict===v('#fVer'))&&(!v('#fAge')||i.ab===v('#fAge'))&&(!v('#fCpi')||lvl(i.cpi)===v('#fCpi'))
-    &&i.spend>=mn&&(!q||i.cid.includes(q)||i.gid.includes(q))&&(!$('#fPlay').checked||i.v));
-  const key={spend:i=>i.spend,cpi:i=>i.cpi,inst:i=>i.inst,dur:i=>i.dur,up:i=>i.up||'',age:i=>i.age??-1}[sortBy];
+    &&i.spend>=mn&&(!q||(i.cid||'').includes(q)||(i.gid||'').includes(q)||(i.name||'').includes(q))&&(!$('#fPlay').checked||i.v));
+  const key={spend:i=>i.spend,cpi:i=>i.cpi,inst:i=>i.inst??-1,dur:i=>i.dur,up:i=>i.up||'',age:i=>i.age??-1}[sortBy];
   if(sortBy==='cpi') L=L.filter(i=>i.cpi!=null);
   L=[...L].sort((a,b)=>{const x=key(a),y=key(b);const c=typeof x==='string'?x.localeCompare(y):x-y;return dir==='asc'?c:-c});
   $('#fCount').textContent=L.length+' 条';
   $('#grid').innerHTML=L.slice(0,shown).map(i=>{
     const th=i.t||i.i;
-    return `<div class="card" tabindex="0" data-r="${i.rank}"><div class="m">${th?`<img loading="lazy" src="${th}" alt="${i.c2}">`:`<div class="none">${i.type}<br>到变色龙看</div>`}<span class="rk">#${i.rank}</span>${i.v?'<span class="play">播放</span>':''}</div><div class="b"><div class="top"><span class="sp">${fmt(i.spend)}</span>${chip(i.cpi)}</div><span class="sub">${i.scene} / ${i.c2}</span><span class="sub">${i.type}${i.dur?' '+Math.round(i.dur)+'秒':''} ${i.rb}${i.verdict&&i.verdict!=='无效素材'?' '+i.verdict:''}</span><span class="sub">${i.up?i.up.slice(5)+' 上传，上传至今 '+i.age+' 天':'上传日期未知'}</span></div></div>`}).join('');
+    return `<div class="card" tabindex="0" data-r="${i.ix}"><div class="m">${th?`<img loading="lazy" src="${th}" alt="${i.c2}">`:`<div class="none">${i.type}<br>到变色龙看</div>`}<span class="rk">${i.lab}</span>${i.v?'<span class="play">播放</span>':''}</div><div class="b"><div class="top"><span class="sp">${fmt(i.spend)}</span>${chip(i.cpi)}</div><span class="sub">${i.src==="同盘子"?i.scene:i.src} / ${i.c2}</span><span class="sub">${i.type}${i.dur?' '+Math.round(i.dur)+'秒':''} ${i.rb}${i.verdict&&i.verdict!=='无效素材'?' '+i.verdict:''}</span><span class="sub">${i.up?i.up.slice(5)+' 上传，上传至今 '+i.age+' 天':i.src==='同盘子'?'上传日期未知':(i.inst!=null?'新增 '+fi(i.inst):(i.regs||[]).join(' '))}</span></div></div>`}).join('');
   $('#more').hidden=L.length<=shown;
   bind('#grid .card');
 }
-function bind(sel){$$(sel).forEach(el=>{const go=()=>openItem(D.pan.items[el.dataset.r-1]);el.onclick=go;el.onkeydown=e=>{if(e.key==='Enter')go()}})}
+function bind(sel){$$(sel).forEach(el=>{const go=()=>openItem(D.all[+el.dataset.r]);el.onclick=go;el.onkeydown=e=>{if(e.key==='Enter')go()}})}
 function openItem(i){
-  const m=i.v?`<video src="${i.v}" controls autoplay muted playsinline></video>`:i.i?`<img src="${i.i}" alt="素材大图">`:`<div style="color:#e4e8e3;padding:24px">这条没存到本页，点右侧变色龙链接</div>`;
-  lb(m,`<b class="num" style="font-size:21px">${fmt(i.spend)} 消耗，CPI ${cp(i.cpi)}</b><span>新增 ${fi(i.inst)}，全盘第 ${i.rank} 名</span><span>${i.scene} / ${i.c1} / ${i.c2}</span><span>${i.type} ${i.size}${i.dur?'，'+i.dur+' 秒':''}，${i.up} 上传，至 11-17 共 ${i.age} 天</span><span>${i.verdict||''}</span>${i.gid?`<a href="https://www.tiktok.com/@/video/${i.gid}" target="_blank" rel="noopener">TikTok 原帖</a>`:''}${i.url?`<a href="${i.url}" target="_blank" rel="noopener">变色龙原片（需登录）</a>`:''}<span style="color:#9aa5ad">CID ${i.cid}</span>`);
+  const m=i.v?`<video src="${i.v}" controls autoplay muted playsinline></video>`:(i.i||i.t)?`<img src="${i.i||i.t}" alt="素材大图">`:`<div style="color:#e4e8e3;padding:24px">这条没存到本页，点右侧变色龙链接</div>`;
+  lb(m,`<b class="num" style="font-size:21px">${fmt(i.spend)} 消耗，CPI ${cp(i.cpi)}</b>${i.src!=='同盘子'&&i.inst!=null?'<span>消耗 = 新增 × CPI 算出</span>':''}<span>${i.src==='同盘子'?'新增 '+fi(i.inst)+'，同盘子第 '+i.rank+' 名':i.src+' 内部投放'+(i.inst!=null?'，新增 '+fi(i.inst):'')+(i.name?'，'+i.name:'')}</span><span>${i.scene} / ${i.c1} / ${i.c2}</span><span>${i.type} ${i.size}${i.dur?'，'+i.dur+' 秒':''}${i.up?'，'+i.up+' 上传，至 11-17 共 '+i.age+' 天':''}</span><span>${i.verdict||''}</span>${i.gid?`<a href="https://www.tiktok.com/@/video/${i.gid}" target="_blank" rel="noopener">TikTok 原帖</a>`:''}${i.url?`<a href="${i.url}" target="_blank" rel="noopener">变色龙原片（需登录）</a>`:''}<span style="color:#9aa5ad">CID ${i.cid}</span>`);
 }
 function lb(m,info){$('#lbm').innerHTML=m;$('#lbi').innerHTML=info;$('#lb').hidden=false;$('#lbx').focus()}
 function closeLb(){$('#lb').hidden=true;$('#lbm').innerHTML=''}
@@ -252,7 +261,7 @@ function market(){
     const max=Math.max(...s.scene.map(x=>x[1]));
     return `<div><h2 style="font-size:14px">${s.name} <span class="mute">${fi(s.n)} 条</span></h2><div class="bars" style="grid-template-columns:minmax(80px,1.2fr) minmax(0,1.6fr) 44px 40px">`+
     s.scene.map(([k,v])=>`<span class="lab">${k}</span><span class="track"><span class="fill" style="width:${(v/max*100).toFixed(1)}%"></span></span><span class="r num">${fi(v)}</span><span class="r num">${(v/s.n*100).toFixed(0)}%</span>`).join('')+`</div></div>`}).join('')+
-    '<div><h2 style="font-size:14px">10/26–10/31 各类型样例</h2>'+Object.entries(D.dp.vukoLd.samples).map(([k,arr])=>`<div class="mute" style="font-size:12px;margin-top:8px">${k}</div><div class="samples">${arr.map(a=>`<img loading="lazy" src="${a.i}" alt="${k}" data-v="${a.v}" data-rg="${a.rg}">`).join('')}</div>`).join('')+'</div>';
+    '<details><summary>10/26–10/31 各类型样例</summary>'+Object.entries(D.dp.vukoLd.samples).map(([k,arr])=>`<div class="mute" style="font-size:12px;margin-top:8px">${k}</div><div class="samples">${arr.map(a=>`<img loading="lazy" src="${a.i}" alt="${k}" data-v="${a.v}" data-rg="${a.rg}">`).join('')}</div>`).join('')+'</details>';
   $$('.samples img').forEach(el=>el.onclick=()=>lb(`<img src="${el.getAttribute('src')}" alt="样例大图">`,`<span>${el.alt}</span><span>地区 ${el.dataset.rg}</span>${el.dataset.v?`<a href="${el.dataset.v}" target="_blank" rel="noopener">变色龙视频（需登录）</a>`:''}`));
 }
 function inhouse(){
