@@ -133,6 +133,7 @@ details summary{cursor:pointer;font-weight:700}
   <section class="blk" aria-label="素材墙">
     <div class="bar-head"><h2>素材墙 <span class="mute num" id="fCount"></span></h2>
       <span class="seg" role="group" aria-label="来源" id="srcSeg"><button data-v="" aria-pressed="true">全部</button><button data-v="同盘子" aria-pressed="false">同盘子</button><button data-v="内部" aria-pressed="false">内部投放</button></span>
+      <span class="seg" role="group" aria-label="类型" id="typeSeg"><button data-v="" aria-pressed="true">全部</button><button data-v="视频" aria-pressed="false">视频</button><button data-v="图片" aria-pressed="false">图文</button></span>
       <span class="seg" role="group" aria-label="排序" id="sortSeg"><button data-s="cpi" aria-pressed="false">CPI</button><button data-s="spend" aria-pressed="true">消耗</button><button data-s="inst" aria-pressed="false">新增用户</button></span>
       <span class="seg" role="group" aria-label="方向" id="dirSeg"><button data-d="desc" aria-pressed="true">降序</button><button data-d="asc" aria-pressed="false">升序</button></span>
     </div>
@@ -152,7 +153,7 @@ const fi=n=>n==null?'–':Number(n).toLocaleString('en-US',{maximumFractionDigit
 const cp=n=>n==null?'–':'$'+n.toFixed(1);
 const durB=i=>i.type!=='视频'?'图片':!i.dur?'未知':i.dur<=10?'≤10秒':i.dur<=20?'10–20秒':i.dur<=40?'20–40秒':i.dur<=60?'40–60秒':'60秒以上';
 const ratioB=i=>{const m=(i.size||'').split('x').map(Number);if(m.length<2||!m[1])return'其他';const r=m[0]/m[1];return r<0.6?'9:16 竖屏':r<0.9?'4:5':r<1.1?'1:1 方图':'横屏'};
-let D,AVG,shown=60,sortBy='spend',dir='desc',t10='v',SRC='';
+let D,AVG,shown=60,sortBy='spend',dir='desc',t10='v',SRC='',TYP='';
 const lvl=c=>c==null?'none':c<=AVG?'good':c>AVG*1.3?'bad':'mid';
 const chip=c=>`<span class="chip ${lvl(c)==='none'?'mid':lvl(c)}">${cp(c)}</span>`;
 fetch('data.json').then(r=>r.json()).then(d=>{D=d;AVG=d.pan.total.cpi;
@@ -201,6 +202,7 @@ function init(){
   $$('.fold').forEach(b=>b.onclick=()=>{const d=document.getElementById(b.dataset.d);d.open=false;d.scrollIntoView({block:'nearest'})});
   let src='';
   $$('#srcSeg button').forEach(b=>b.onclick=()=>{$$('#srcSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));SRC=b.dataset.v;shown=60;wall()});
+  $$('#typeSeg button').forEach(b=>b.onclick=()=>{$$('#typeSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));TYP=b.dataset.v;shown=60;wall()});
   $$('#sortSeg button').forEach(b=>b.onclick=()=>{$$('#sortSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));sortBy=b.dataset.s;shown=60;wall()});
   $$('#dirSeg button').forEach(b=>b.onclick=()=>{$$('#dirSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));dir=b.dataset.d;shown=60;wall()});
   $$('[aria-label="借鉴类型"] button').forEach(b=>b.onclick=()=>{$$('[aria-label="借鉴类型"] button').forEach(x=>x.setAttribute('aria-pressed',x===b));t10=b.dataset.k;top10()});
@@ -218,7 +220,7 @@ function top10(){
   bind('#top10 .lcard');
 }
 function wall(){
-  let L=D.all.filter(i=>!SRC||(SRC==='同盘子'?i.src==='同盘子':i.src!=='同盘子'));
+  let L=D.all.filter(i=>(!SRC||(SRC==='同盘子'?i.src==='同盘子':i.src!=='同盘子'))&&(!TYP||i.type===TYP));
   if(sortBy==='cpi') L=L.filter(i=>i.cpi!=null&&i.spend>=200);
   if(sortBy==='inst') L=L.filter(i=>i.inst!=null);
   const key={spend:i=>i.spend,cpi:i=>i.cpi,inst:i=>i.inst}[sortBy];
