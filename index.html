@@ -132,9 +132,10 @@ details summary{cursor:pointer;font-weight:700}
   <div class="blk" aria-label="TikTok 热点趋势">
     <h2>TikTok 美区热点 <span class="mute num" id="trUp"></span></h2>
     <span class="mute" style="font-size:12px" id="trNote"></span>
-    <h3 class="trh">上周回顾 <span class="mute num" id="trR"></span></h3>
+    <span class="seg" role="group" aria-label="热点筛选" id="trSeg" style="align-self:flex-start"><button data-g="" aria-pressed="true">全部</button><button data-g="能做" aria-pressed="false">能做</button><button data-g="观望" aria-pressed="false">观望</button><button data-g="不做" aria-pressed="false">不做</button></span>
+    <h3 class="trh" id="trhR">上周回顾 <span class="mute num" id="trR"></span></h3>
     <div class="trs" id="trsR"></div>
-    <h3 class="trh">本周前瞻 <span class="mute num" id="trA"></span></h3>
+    <h3 class="trh" id="trhA">本周前瞻 <span class="mute num" id="trA"></span></h3>
     <div class="trs" id="trsA"></div>
   </div>
   <div class="blk"><h2>结论</h2><ol class="pts" id="pts"></ol></div>
@@ -300,8 +301,8 @@ function inhouse(){
     lb(a.v?`<video src="${a.v}" controls autoplay muted playsinline></video>`:`<img src="${a.i||a.t}" alt="封面大图">`,`<span>${a.wk} ${a.name||a.tag||''}</span>${a.spend!=null?`<b class="num">${fmt(a.spend)}</b>`:`<span>新增 ${fi(a.inst)}，CPI ${cp(a.cpi)}</span>`}${a.url?`<a href="${a.url}" target="_blank" rel="noopener">变色龙视频（需登录）</a>`:''}`)});
 }
 
-let TR;
-const goChip=g=>`<span class="chip ${g==='能做'||g==='提前准备'?'good':g==='不做'?'bad':'mid'}">${g}</span>`;
+let TR,trGo='';
+const goChip=g=>`<span class="chip ${g==='能做'?'good':g==='不做'?'bad':'mid'}">${g}</span>`;
 function spark(c){if(!c||!c.curve||!c.curve.length)return'';const W=112,H=36,n=c.curve.length;
   const pts=c.curve.map((v,i)=>`${(i/(n-1)*(W-4)+2).toFixed(1)},${(H-3-v/100*(H-6)).toFixed(1)}`).join(' ');
   return `<div class="spark"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="#${c.tag} 7 天热度"><polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2"/></svg><span>#${c.tag} 第 ${c.rank} 名<br>11-15→11-21</span></div>`}
@@ -312,8 +313,12 @@ function trends(){
   $('#trUp').textContent=TR.updated+' 周一';
   $('#trNote').textContent='来源：'+TR.src+'。点封面去 TikTok 看原片';
   $('#trR').textContent=R.range;$('#trA').textContent=A.range;
-  $('#trsR').innerHTML=(f?`<div class="tr fyp"><div><div class="hd"><b>${f.title}</b></div><p>${f.what}</p><p class="dt">${f.take}</p></div>${refs(f.refs)}</div>`:'')+R.items.map(trItem).join('');
-  $('#trsA').innerHTML=A.items.map(trItem).join('')}
-fetch('trends.json').then(r=>r.json()).then(t=>{TR=t;trends()});
+  const pick=L=>L.filter(i=>!trGo||i.go===trGo);
+  const r=pick(R.items),a=pick(A.items);
+  $('#trsR').innerHTML=(f&&!trGo?`<div class="tr fyp"><div><div class="hd"><b>${f.title}</b></div><p>${f.what}</p><p class="dt">${f.take}</p></div>${refs(f.refs)}</div>`:'')+r.map(trItem).join('');
+  $('#trsA').innerHTML=a.map(trItem).join('');
+  $('#trhR').hidden=!$('#trsR').innerHTML;$('#trhA').hidden=!a.length}
+fetch('trends.json').then(r=>r.json()).then(t=>{TR=t;trends();
+  $$('#trSeg button').forEach(b=>b.onclick=()=>{$$('#trSeg button').forEach(x=>x.setAttribute('aria-pressed',x===b));trGo=b.dataset.g;trends()})});
 </script>
 </body></html>
