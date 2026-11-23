@@ -1,0 +1,365 @@
+{
+ "updated": "2026-11-23",
+ "src": "美区 Creative Center 7 天热门话题榜前 100（11-15→11-21）、30 天榜前 100、TikTok 站内搜索播放量、Virlo / KnowYourMeme 趋势追踪；新号首页是不登录拉美区推荐流 8 次、共 74 条",
+ "review": {
+  "range": "11-16 – 11-22",
+  "items": [
+   {
+    "k": "音频梗跟拍",
+    "go": "能做",
+    "title": "HUSS / In this town everybody goes out partying except me",
+    "what": "先说「城里人人都出去嗨，除了我」，镜头一转自己一个人干事，喊 HUSS HUSS HUSS。原音频 @larpniverse 11-13 发，6 天 3600 万播放",
+    "data": "美区 7 天话题榜第 1 #huss、第 2 #husshusshuss、第 5 #inthistown，三个话题合计 8.2 万条作品",
+    "curve": {
+     "tag": "huss",
+     "rank": 1,
+     "posts": 20055,
+     "curve": [
+      0,
+      25,
+      62,
+      89,
+      93,
+      96,
+      100
+     ]
+    },
+    "refs": [
+     {
+      "u": "https://www.tiktok.com/@larpniverse/video/7707635922652630285",
+      "t": "trend/7707635922652630285.jpg",
+      "p": "3600万+",
+      "cap": "原音频"
+     },
+     {
+      "u": "https://www.tiktok.com/@overtime/video/7710371373968788749",
+      "t": "trend/7710371373968788749.jpg",
+      "p": "130万",
+      "cap": "跟拍"
+     }
+    ]
+   },
+   {
+    "k": "共鸣 meme",
+    "go": "能做",
+    "title": "I got so mad I…",
+    "what": "「我气到 + 一件屁大点的小事」配一张瞪眼反应脸，评论区截图轮播居多。10-31 冒头，11 月中走红",
+    "data": "@foolybob 11-08 一条 940 万，11-19 @mavon_hub 310 万；结构就是 W2 美区最能花钱的「顶字幕＋反应脸」",
+    "curve": null,
+    "refs": [
+     {
+      "u": "https://www.tiktok.com/@foolybob/video/7705814343073467656",
+      "t": "trend/7705814343073467656.jpg",
+      "p": "940万",
+      "cap": "评论截图轮播"
+     },
+     {
+      "u": "https://www.tiktok.com/@mavon_hub/video/7709818627347729686",
+      "t": "trend/7709818627347729686.jpg",
+      "p": "310万",
+      "cap": "11-19 新爆款"
+     }
+    ]
+   },
+   {
+    "k": "拍同款",
+    "go": "能做",
+    "title": "Boom Clap 彩纸炮 / 扛肩自拍 / Ba Ba Ba 双人舞",
+    "what": "对口型唱 Boom Clap，卡点拉礼花炮撒彩纸；扛肩对镜自拍和双人舞也在刷，这两个已经在回落",
+    "data": "@nataliireynoldss 11-19 一条 5710 万，@sayka_chu 4710 万；Virlo 统计 Boom Clap 近 7 天创作者 194 个（上周 42）",
+    "curve": null,
+    "refs": [
+     {
+      "u": "https://www.tiktok.com/@nataliireynoldss/video/7709682900932775198",
+      "t": "trend/7709682900932775198.jpg",
+      "p": "5710万",
+      "cap": "彩纸炮"
+     },
+     {
+      "u": "https://www.tiktok.com/@sayka_chu/video/7709178793071496454",
+      "t": "trend/7709178793071496454.jpg",
+      "p": "4710万",
+      "cap": "彩纸炮"
+     }
+    ]
+   },
+   {
+    "k": "宠物",
+    "go": "能做",
+    "title": "Reaching out 摸猫",
+    "what": "手伸向镜头「touch a stranger」，下一秒摸到猫，猫回头惊叫。6 秒一条，不用懂英文",
+    "data": "11-14 起，@shirodemo 110 万，@lilricepot 11-22 发的已 70 万",
+    "curve": null,
+    "refs": [
+     {
+      "u": "https://www.tiktok.com/@lilricepot/video/7710854195091361038",
+      "t": "trend/7710854195091361038.jpg",
+      "p": "70万",
+      "cap": "11-22"
+     },
+     {
+      "u": "https://www.tiktok.com/@sarahelizabethofficial/video/7710541001240136968",
+      "t": "trend/7710541001240136968.jpg",
+      "p": "20万",
+      "cap": "摸猫惊叫"
+     }
+    ]
+   },
+   {
+    "k": "影视综艺",
+    "go": "观望",
+    "title": "SNL「He wanna pay full price」/ 新版饥饿游戏",
+    "what": "Druski 11-07 上 SNL 的小品原声被拿来对口型；饥饿游戏前传《Sunrise on the Reaping》相关话题一路往上",
+    "data": "#hewannapayfullprice 话题榜第 28；#sotr 第 27、#hungergames 第 43，曲线到 11-21 还在最高点。都用节目或电影原素材，过变色龙风险大",
+    "curve": {
+     "tag": "sotr",
+     "rank": 27,
+     "posts": 22875,
+     "curve": [
+      0,
+      6,
+      35,
+      34,
+      59,
+      84,
+      100
+     ]
+    },
+    "refs": [
+     {
+      "u": "https://www.tiktok.com/@theyy_all_luvv/video/7709756411093191950",
+      "t": "trend/7709756411093191950.jpg",
+      "p": "450万",
+      "cap": "full price 对口型"
+     },
+     {
+      "u": "https://www.tiktok.com/@collinurrmom/video/7709747479675145503",
+      "t": "trend/7709747479675145503.jpg",
+      "p": "1100万",
+      "cap": "反派转椅梗"
+     }
+    ]
+   },
+   {
+    "k": "游戏大事件",
+    "go": "不做",
+    "title": "GTA6",
+    "what": "GTA6 相关话题在前 100 里占了十几个（gta6、gtavi、lucia、vicecity…），11-19 冲顶",
+    "data": "#gta6 7 天 105.8 万条作品，榜单第 10；内容几乎全是游戏画面，版权过不了",
+    "curve": {
+     "tag": "gta6",
+     "rank": 10,
+     "posts": 1057628,
+     "curve": [
+      0,
+      10,
+      27,
+      74,
+      100,
+      94,
+      86
+     ]
+    },
+    "refs": []
+   },
+   {
+    "k": "消费节点",
+    "go": "观望",
+    "title": "黑五 / 星巴克红杯日 / 感恩节放假",
+    "what": "#tiktokshopblackfriday 是电商活动话题；红杯日 11-17 到顶后已经掉到 5；#thanksgivingbreak 11-20 冲顶",
+    "data": "#tiktokshopblackfriday 7 天 293 万条，带货为主，跟我们的内容不搭",
+    "curve": {
+     "tag": "redcupday",
+     "rank": 11,
+     "posts": 7009,
+     "curve": [
+      0,
+      41,
+      100,
+      76,
+      41,
+      13,
+      5
+     ]
+    },
+    "refs": []
+   },
+   {
+    "k": "新闻",
+    "go": "不做",
+    "title": "辛辛那提动物园河马 Fiona 去世",
+    "what": "11-19 动物园宣布 Fiona 吞下游客帽子后不治。#cincinnatizoo #hippo #fiona 同时上榜",
+    "data": "悲伤新闻，不适合拿来做广告素材",
+    "curve": {
+     "tag": "cincinnatizoo",
+     "rank": 26,
+     "posts": 4548,
+     "curve": [
+      0,
+      12,
+      22,
+      46,
+      87,
+      100,
+      86
+     ]
+    },
+    "refs": []
+   }
+  ],
+  "fyp": {
+   "title": "新号打开首页看到什么",
+   "what": "不登录拉美区推荐流 8 次，74 条全是 9-13 到 10-08 发的老爆款，没有一条是这周的热点。新号冷启动推的是已经验证过的一眼懂内容：手机电量共鸣梗、蓝领上班日常、解压捏捏玩具、做饭、街头搞笑",
+   "refs": [
+    {
+     "u": "https://www.tiktok.com/@uespiiiii.1115/video/7693178636706368788",
+     "t": "trend/7693178636706368788.jpg",
+     "p": "6440万",
+     "cap": "电量共鸣"
+    },
+    {
+     "u": "https://www.tiktok.com/@rajaplugtv/video/7688830724677389590",
+     "t": "trend/7688830724677389590.jpg",
+     "p": "3460万",
+     "cap": "街头 meme"
+    },
+    {
+     "u": "https://www.tiktok.com/@wilsons_m3____40i/video/7691327111486885151",
+     "t": "trend/7691327111486885151.jpg",
+     "p": "2590万",
+     "cap": "蓝领日常"
+    },
+    {
+     "u": "https://www.tiktok.com/@lzhang468/video/7689387087115701518",
+     "t": "trend/7689387087115701518.jpg",
+     "p": "1260万",
+     "cap": "做饭"
+    },
+    {
+     "u": "https://www.tiktok.com/@nothosaurtoy4/video/7688927765692828941",
+     "t": "trend/7688927765692828941.jpg",
+     "p": "1230万",
+     "cap": "捏捏玩具"
+    },
+    {
+     "u": "https://www.tiktok.com/@mars.tm_/video/7692136492621172001",
+     "t": "trend/7692136492621172001.jpg",
+     "p": "1120万",
+     "cap": "街头冲突"
+    }
+   ],
+   "take": "对我们的意思：解压、共鸣这类「已验证一眼懂」的内容，在新号首页一直有位置，热点只是加分项"
+  }
+ },
+ "ahead": {
+  "range": "11-23 – 11-29",
+  "items": [
+   {
+    "k": "节点",
+    "go": "能做",
+    "title": "感恩节 11-26 → 黑五 11-27 → 网一 11-30",
+    "what": "家庭饭桌共鸣梗、做饭翻车、抢购梗会集中出现。W4 素材上线时感恩节已过，黑五和网一还赶得上",
+    "data": "#thanksgivingbreak 11-20 冲顶；#amazonblackfriday 11-19 起到 11-21 维持高位",
+    "curve": {
+     "tag": "amazonblackfriday",
+     "rank": 64,
+     "posts": 4317,
+     "curve": [
+      0,
+      8,
+      21,
+      47,
+      96,
+      100,
+      97
+     ]
+    },
+    "refs": []
+   },
+   {
+    "k": "圣诞",
+    "go": "能做",
+    "title": "感恩节一过，圣诞内容放量",
+    "what": "圣诞树上架、拆礼物、圣诞日历、圣诞歌「现在可以放了」这类内容会在 11-27 之后接棒",
+    "data": "30 天榜已出现 #lastchristmas #starbucksholidaydrinks #sugarcookielatte",
+    "curve": null,
+    "refs": []
+   },
+   {
+    "k": "音频梗",
+    "go": "能做",
+    "title": "HUSS / In this town 还在顶部",
+    "what": "#huss 到 11-21 还是最高点，#inthistown 开始缓慢回落（100→85），这周内还能用，下周大概率过气",
+    "data": "He wanna pay full price 已从 100 掉到 86",
+    "curve": {
+     "tag": "inthistown",
+     "rank": 5,
+     "posts": 42929,
+     "curve": [
+      0,
+      68,
+      94,
+      100,
+      93,
+      89,
+      85
+     ]
+    },
+    "refs": []
+   },
+   {
+    "k": "影视",
+    "go": "观望",
+    "title": "饥饿游戏新片",
+    "what": "#sotr #hungergames #haymitch 三条曲线到 11-21 都还在往上，这周会继续热",
+    "data": "只有电影画面和角色，版权过不了；能做的只有不带原片的反应梗",
+    "curve": {
+     "tag": "hungergames",
+     "rank": 43,
+     "posts": 58588,
+     "curve": [
+      0,
+      4,
+      39,
+      32,
+      52,
+      80,
+      100
+     ]
+    },
+    "refs": []
+   },
+   {
+    "k": "年终回顾",
+    "go": "提前准备",
+    "title": "「How I've looked throughout the year」月度回顾",
+    "what": "一个月一张照片拼成年度蒙太奇，Virlo 标 Fresh，12 月会越来越多",
+    "data": "近 7 天 190 个创作者在拍",
+    "curve": null,
+    "refs": []
+   },
+   {
+    "k": "在退",
+    "go": "不做",
+    "title": "红杯日、格莱美、詹姆斯·邦德、关门整蛊、Ba Ba Ba 舞",
+    "what": "都在回落，红杯日和格莱美已经掉到顶点的一成上下",
+    "data": "#redcupday 100→5，#grammys 100→14，#jamesbond 100→51",
+    "curve": {
+     "tag": "grammys",
+     "rank": 29,
+     "posts": 11274,
+     "curve": [
+      0,
+      97,
+      100,
+      71,
+      42,
+      26,
+      14
+     ]
+    },
+    "refs": []
+   }
+  ]
+ }
+}
